@@ -1,7 +1,8 @@
 import {
-  RiFileChartLine,
+  RiEmpathizeLine,
+  RiFileChartLine, RiFlaskLine,
   RiHome4Fill,
-  RiMoneyDollarCircleLine,
+  RiMoneyDollarCircleLine, RiNurseLine,
   RiPencilRuler2Line,
 } from '@remixicon/react';
 
@@ -13,6 +14,30 @@ export const sidebarItemsApp = [
     current: false,
     icon: RiHome4Fill,
     iconColor: 'text-slate-800',
+  },
+  {
+    key: 'doctors',
+    title: 'Médicos',
+    href: '/medicos',
+    current: false,
+    icon: RiNurseLine,
+    iconColor: 'text-red-900',
+  },
+  {
+    key: 'medicalPatients',
+    title: 'Pacientes médicos',
+    href: '/pacientes-medicos',
+    current: false,
+    icon: RiEmpathizeLine,
+    iconColor: 'text-blue-900',
+  },
+  {
+    key: 'medicalExaminationTypes',
+    title: 'Tipos de exámenes médicos',
+    href: '/tipos-de-examenes-medicos',
+    current: false,
+    icon: RiFlaskLine,
+    iconColor: 'text-green-900',
   },
   {
     key: 'budgetSheets',
