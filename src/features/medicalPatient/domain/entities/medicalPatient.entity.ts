@@ -1,3 +1,5 @@
+import { type MedicalExaminationEntity } from '../../../medicalExamination';
+
 export class MedicalPatientEntity {
   constructor(
     public id: string,
@@ -6,7 +8,7 @@ export class MedicalPatientEntity {
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
-    public medicalExamination?: unknown[] | null,
+    public medicalExamination?: MedicalExaminationEntity[] | null,
     public deleted?: boolean | null,
     public createdAt?: Date | null,
     public updatedAt?: Date | null,
@@ -21,7 +23,7 @@ export class MedicalPatientGetAllResponseEntity implements Omit<MedicalPatientEn
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
-    public medicalExamination?: unknown[] | null,
+    public medicalExamination?: MedicalExaminationEntity[] | null,
     public createdAt?: Date | null,
   ) {}
 }
@@ -34,7 +36,7 @@ export class MedicalPatientGetByIdResponseEntity implements Pick<MedicalPatientE
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
-    public medicalExamination?: unknown[] | null,
+    public medicalExamination?: MedicalExaminationEntity[] | null,
     public createdAt?: Date | null,
   ) {}
 }

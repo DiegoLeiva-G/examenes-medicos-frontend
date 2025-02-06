@@ -1,3 +1,5 @@
+import { MedicalExaminationEntity } from '../../../medicalExamination';
+
 export class DoctorEntity {
   constructor(
     public id: string,
@@ -7,7 +9,7 @@ export class DoctorEntity {
     public secondaryLastName?: string | null,
     public nameProfession?: string[] | null,
     public specialization?: string[] | null,
-    public medicalExamination?: unknown[] | null,
+    public medicalExamination?: MedicalExaminationEntity[] | null,
     public deleted?: boolean | null,
     public createdAt?: Date | null,
     public updatedAt?: Date | null,
@@ -23,7 +25,7 @@ export class DoctorGetAllResponseEntity implements Omit<DoctorEntity,  'deleted'
     public secondaryLastName?: string | null,
     public nameProfession?: string[] | null,
     public specialization?: string[] | null,
-    public medicalExamination?: unknown[] | null,
+    public medicalExamination?: MedicalExaminationEntity[] | null,
     public createdAt?: Date | null,
   ) {}
 }
@@ -37,7 +39,7 @@ export class DoctorGetByIdResponseEntity implements Pick<DoctorEntity, 'id'> {
     public secondaryLastName?: string | null,
     public nameProfession?: string[] | null,
     public specialization?: string[] | null,
-    public medicalExamination?: unknown[] | null,
+    public medicalExamination?: MedicalExaminationEntity[] | null,
     public createdAt?: Date | null,
   ) {}
 }

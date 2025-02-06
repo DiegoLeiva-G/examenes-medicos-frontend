@@ -65,7 +65,6 @@ export class MedicalPatientDatasourceImpl implements MedicalPatientDatasource {
 
   public async updateMedicalPatient(data: Partial<MedicalPatientFormEntity>): Promise<IApiResponse<MedicalPatientUpdateResponseEntity>> {
     const { id, ...restData } = data;
-    console.log(id)
     const urlEncodedData = new URLSearchParams();
 
     Object.entries(restData).forEach(([key, value]) => {

@@ -1,10 +1,24 @@
-import {
-  RiEmpathizeLine, RiFlaskLine,
-  RiMoneyDollarCircleLine, RiNurseLine,
-  RiPencilRuler2Line,
-} from '@remixicon/react';
+import { RiEmpathizeLine, RiFlaskLine, RiHealthBookLine, RiNurseLine } from '@remixicon/react';
 
 export const homeCardItems = [
+  {
+    key: 'medicalExaminations',
+    title: 'Examenes médicos',
+    description: '...',
+    href: '/Examenes-medicos',
+    icon: RiHealthBookLine,
+    iconColor: 'text-yellow-900',
+    iconBackgroundColor: 'bg-yellow-50',
+  },
+  {
+    key: 'medicalExaminationTypes',
+    title: 'Tipos de examen médicos',
+    description: '...',
+    href: '/tipos-de-examenes-medicos',
+    icon: RiFlaskLine,
+    iconColor: 'text-green-900',
+    iconBackgroundColor: 'bg-green-50',
+  },
   {
     key: 'doctors',
     title: 'Médicos',
@@ -23,31 +37,5 @@ export const homeCardItems = [
     iconColor: 'text-blue-900',
     iconBackgroundColor: 'bg-blue-50',
   },
-  {
-    key: 'medicalExaminationTypes',
-    title: 'Tipos de exámenes médicos',
-    description: '...',
-    href: '/tipos-de-examenes-medicos',
-    icon: RiFlaskLine,
-    iconColor: 'text-green-900',
-    iconBackgroundColor: 'bg-green-50',
-  },
-  {
-    key: 'financingSources',
-    title: 'Fuentes de Financiamiento',
-    description: '...',
-    href: '/fuentes-de-financiamiento',
-    icon: RiMoneyDollarCircleLine,
-    iconColor: 'text-indigo-900',
-    iconBackgroundColor: 'bg-indigo-50',
-  },
-  {
-    key: 'measureUnits',
-    title: 'Unidades de medida',
-    description: '...',
-    href: '/unidades-de-medida',
-    icon: RiPencilRuler2Line,
-    iconColor: 'text-sky-900',
-    iconBackgroundColor: 'bg-sky-50',
-  },
+
 ];

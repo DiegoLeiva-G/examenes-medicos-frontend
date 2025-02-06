@@ -8,7 +8,7 @@ import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { type MedicalExaminationTypeEntity, type MedicalExaminationTypeGetAllResponseEntity } from '../../domain';
 import { type loaderMedicalExaminationTypeList, type medicalExaminationTypeDynamicFilters } from '../dataFetching';
 import { Table, type TableProps } from 'antd';
-import { medicalExaminationTypes } from '@core/helpers';
+import { medicalExaminationTypesTranslation } from '@core/helpers';
 
 export const MedicalExaminationTypeListPage: FC = () => {
   const { medicalExaminationType, filters } = useLoaderData<typeof loaderMedicalExaminationTypeList>();
@@ -73,9 +73,9 @@ export const MedicalExaminationTypeListPage: FC = () => {
         ),
       },
       {
-        title: 'Tipo de exámen',
+        title: 'Tipo de examen',
         key: 'type',
-        render: (_, item) => medicalExaminationTypes[item.type] || 'Tipo desconocido',
+        render: (_, item) => medicalExaminationTypesTranslation[item.type] || 'Tipo desconocido',
       },
       {
         title: '',
@@ -106,7 +106,7 @@ export const MedicalExaminationTypeListPage: FC = () => {
         href: '/home',
       },
       {
-        title: 'Tipos de exámenes médicos',
+        title: 'Tipos de examen médicos',
         href: '/tipos-de-examenes-medicos',
       },
     ],
@@ -115,8 +115,8 @@ export const MedicalExaminationTypeListPage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Tipos de exámenes médicos - Exámenes médicos`} />
-      <BreadCrumb title={`Lista de Tipos de exámenes médicos`} navItems={navItems} />
+      <DocumentMetadata title={`Tipos de examen médicos - examen médicos`} />
+      <BreadCrumb title={`Lista de Tipos de examen médicos`} navItems={navItems} />
       <Container>
         <div className="mx-auto lg:mx-0">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">

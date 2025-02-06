@@ -65,7 +65,6 @@ export class MedicalExaminationTypeDatasourceImpl implements MedicalExaminationT
 
   public async updateMedicalExaminationType(data: Partial<MedicalExaminationTypeFormEntity>): Promise<IApiResponse<MedicalExaminationTypeUpdateResponseEntity>> {
     const { id, ...restData } = data;
-    console.log(id)
     const urlEncodedData = new URLSearchParams();
 
     Object.entries(restData).forEach(([key, value]) => {

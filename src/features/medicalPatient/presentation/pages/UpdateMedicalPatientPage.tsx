@@ -68,7 +68,7 @@ export const UpdateMedicalPatientPage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Editar paciente médico - Exámenes médicos`} />
+      <DocumentMetadata title={`Editar paciente médico - Examenes médicos`} />
       <BreadCrumb title={`Editar paciente médico`} navItems={navItems} />
       <Container>
         <MedicalPatientForm loading={loading} medicalPatient={medicalPatient} onSubmitData={handleOnSubmit} />

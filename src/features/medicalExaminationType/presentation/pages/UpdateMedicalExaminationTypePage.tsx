@@ -27,7 +27,7 @@ export const UpdateMedicalExaminationTypePage: FC = () => {
         })
         .then(response => {
           setLoading(false);
-          const titleNotification = 'Edición del tipo de exámen médico';
+          const titleNotification = 'Edición del tipo de examen médico';
 
           if (response.error?.message) {
             setNotification({
@@ -43,7 +43,7 @@ export const UpdateMedicalExaminationTypePage: FC = () => {
             setNotification({
               title: titleNotification,
               type: 'success',
-              message: 'Se ha editado correctamente el tipo de exámen médico!',
+              message: 'Se ha editado correctamente el tipo de examen médico!',
             });
 
             navigate('/tipos-de-examenes-medicos');
@@ -63,7 +63,7 @@ export const UpdateMedicalExaminationTypePage: FC = () => {
         href: '/home',
       },
       {
-        title: 'Tipos de exámenes médicos',
+        title: 'Tipos de examen médicos',
         href: '/tipos-de-examenes-medicos',
       },
       {
@@ -76,8 +76,8 @@ export const UpdateMedicalExaminationTypePage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Editar tipo de exámen médico - Exámenes médicos`} />
-      <BreadCrumb title={`Editar tipo de exámen médico`} navItems={navItems} />
+      <DocumentMetadata title={`Editar tipo de examen médico - examenes médicos`} />
+      <BreadCrumb title={`Editar tipo de examen médico`} navItems={navItems} />
       <Container>
         <MedicalExaminationTypeForm
           loading={loading}

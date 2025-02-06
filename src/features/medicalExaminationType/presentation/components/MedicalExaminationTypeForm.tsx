@@ -4,7 +4,7 @@ import { Column, Row } from '../../../_global';
 import { Link } from 'react-router-dom';
 import { RiSaveLine } from '@remixicon/react';
 import { Form, Input, Select } from 'antd';
-import { medicalExaminationTypes } from '@core/helpers';
+import { medicalExaminationTypesTranslation } from '@core/helpers';
 
 enum FormFields {
   name = 'name',
@@ -30,7 +30,7 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
   const [form] = Form.useForm();
 
   const medicalExaminationTypeOptions = useMemo(
-    () => Object.entries(medicalExaminationTypes).map(value => ({ label: value[1], value: value[0] })),
+    () => Object.entries(medicalExaminationTypesTranslation).map(value => ({ label: value[1], value: value[0] })),
     [],
   );
 

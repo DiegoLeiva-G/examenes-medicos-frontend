@@ -70,7 +70,7 @@ export const UpdateDoctorPage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Editar médico - Exámenes médicos`} />
+      <DocumentMetadata title={`Editar médico - Examenes médicos`} />
       <BreadCrumb title={`Editar médico`} navItems={navItems} />
       <Container>
         <DoctorForm loading={loading} doctor={doctor} onSubmitData={handleOnSubmit} />

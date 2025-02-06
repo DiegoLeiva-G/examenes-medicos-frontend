@@ -9,8 +9,8 @@ export default function HomePage() {
 
   return (
     <>
-      <DocumentMetadata title="Home - Exámenes médicos" />
-      <BreadCrumb title="Exámenes médicos" navItems={navItems} />
+      <DocumentMetadata title="Home - Examenes médicos" />
+      <BreadCrumb title="Examenes médicos" navItems={navItems} />
       <Container>
         <div className="mx-auto lg:mx-0">
           <p className="text-lg text-gray-900 dark:text-gray-100 font-bold">Accesos directos</p>

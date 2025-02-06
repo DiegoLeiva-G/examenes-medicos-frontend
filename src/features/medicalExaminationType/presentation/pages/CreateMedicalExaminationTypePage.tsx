@@ -20,7 +20,7 @@ export const CreateMedicalExaminationTypePage: FC = () => {
         .execute({ name: formValues.name, type: formValues.type as MedicalExaminationType })
         .then(response => {
           setLoading(false);
-          const titleNotification = 'Creación de tipo de exámen médico';
+          const titleNotification = 'Creación de tipo de examen médico';
 
           if (response.error?.message) {
             setNotification({
@@ -36,7 +36,7 @@ export const CreateMedicalExaminationTypePage: FC = () => {
             setNotification({
               title: titleNotification,
               type: 'success',
-              message: 'Se ha creado correctamente el tipo de exámen médico!',
+              message: 'Se ha creado correctamente el tipo de examen médico!',
             });
 
             navigate('/tipos-de-examenes-medicos');
@@ -45,9 +45,9 @@ export const CreateMedicalExaminationTypePage: FC = () => {
         .catch(() => {
           setLoading(false);
           setNotification({
-            title: 'Creación de tipo de exámen médico',
+            title: 'Creación de tipo de examen médico',
             type: 'error',
-            message: 'No se pudo crear el tipo de exámen médico.',
+            message: 'No se pudo crear el tipo de examen médico.',
           });
         });
     },
@@ -62,7 +62,7 @@ export const CreateMedicalExaminationTypePage: FC = () => {
         href: '/home',
       },
       {
-        title: 'Tipos de exámenes médicos',
+        title: 'Tipos de examenes médicos',
         href: '/tipos-de-examenes-medicos',
       },
       {
@@ -75,8 +75,8 @@ export const CreateMedicalExaminationTypePage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Crear tipo de exámen médico - Exámenes médicos`} />
-      <BreadCrumb title="Crear tipoo de exámen médico" navItems={navItems} />
+      <DocumentMetadata title={`Crear tipo de examen médico - examenes médicos`} />
+      <BreadCrumb title="Crear tipoo de examen médico" navItems={navItems} />
       <Container>
         <MedicalExaminationTypeForm loading={loading} onSubmitData={handleOnSubmit} />
       </Container>

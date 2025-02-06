@@ -23,7 +23,7 @@ const Layout = ({ sidebarItems, username = '', apps, children }: ILayoutProps) =
           items={sidebarItems}
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
-          title="Exámenes Médicos"
+          title="Examenes Médicos"
           apps={apps}
         />
         <div className="flex flex-1 flex-col lg:pl-64">

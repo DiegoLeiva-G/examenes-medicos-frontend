@@ -65,7 +65,6 @@ export class DoctorDatasourceImpl implements DoctorDatasource {
 
   public async updateDoctor(data: Partial<DoctorFormEntity>): Promise<IApiResponse<DoctorUpdateResponseEntity>> {
     const { id, ...restData } = data;
-    console.log(id)
     const urlEncodedData = new URLSearchParams();
 
     Object.entries(restData).forEach(([key, value]) => {

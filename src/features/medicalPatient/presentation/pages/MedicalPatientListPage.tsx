@@ -114,7 +114,7 @@ export const MedicalPatientListPage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Pacientes médicos - Exámenes médicos`} />
+      <DocumentMetadata title={`Pacientes médicos - Examenes médicos`} />
       <BreadCrumb title={`Lista de Pacientes médicos`} navItems={navItems} />
       <Container>
         <div className="mx-auto lg:mx-0">

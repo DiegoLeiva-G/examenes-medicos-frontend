@@ -1,1 +1,1 @@
-# Tipeos exámenes médicos
+# Tipeos examenes médicos

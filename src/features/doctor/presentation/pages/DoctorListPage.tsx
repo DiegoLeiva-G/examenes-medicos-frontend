@@ -11,7 +11,6 @@ import { Table, type TableProps } from 'antd';
 
 export const DoctorListPage: FC = () => {
   const { doctors, filters } = useLoaderData<typeof loaderDoctorList>();
-  console.log(doctors)
   const { setNotification } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
   const { onChangeSearch, onChangePageLimit, onChangePage } = useFilters2<doctorDynamicFilters>(filters);
@@ -138,7 +137,7 @@ export const DoctorListPage: FC = () => {
 
   return (
     <>
-      <DocumentMetadata title={`Médicos - Exámenes médicos`} />
+      <DocumentMetadata title={`Médicos - Examenes médicos`} />
       <BreadCrumb title={`Lista de Médicos`} navItems={navItems} />
       <Container>
         <div className="mx-auto lg:mx-0">

@@ -1,10 +1,4 @@
-import {
-  RiEmpathizeLine,
-  RiFileChartLine, RiFlaskLine,
-  RiHome4Fill,
-  RiMoneyDollarCircleLine, RiNurseLine,
-  RiPencilRuler2Line,
-} from '@remixicon/react';
+import { RiEmpathizeLine, RiFlaskLine, RiHealthBookLine, RiHome4Fill, RiNurseLine } from '@remixicon/react';
 
 export const sidebarItemsApp = [
   {
@@ -14,6 +8,22 @@ export const sidebarItemsApp = [
     current: false,
     icon: RiHome4Fill,
     iconColor: 'text-slate-800',
+  },
+  {
+    key: 'medicalExaminations',
+    title: 'Examenes médicos',
+    href: '/Examenes-medicos',
+    current: false,
+    icon: RiHealthBookLine,
+    iconColor: 'text-yellow-900',
+  },
+  {
+    key: 'medicalExaminationTypes',
+    title: 'Tipos de examen médicos',
+    href: '/tipos-de-examenes-medicos',
+    current: false,
+    icon: RiFlaskLine,
+    iconColor: 'text-green-900',
   },
   {
     key: 'doctors',
@@ -30,55 +40,5 @@ export const sidebarItemsApp = [
     current: false,
     icon: RiEmpathizeLine,
     iconColor: 'text-blue-900',
-  },
-  {
-    key: 'medicalExaminationTypes',
-    title: 'Tipos de exámenes médicos',
-    href: '/tipos-de-examenes-medicos',
-    current: false,
-    icon: RiFlaskLine,
-    iconColor: 'text-green-900',
-  },
-  {
-    key: 'budgetSheets',
-    title: 'Fichas de Presupuesto',
-    href: '/fichas-de-presupuesto',
-    current: false,
-    icon: RiFileChartLine,
-    iconColor: 'text-teal-900',
-    children: [
-      {
-        key: 'investmentInitiatives',
-        title: 'Iniciativas de inversion',
-        href: '/fichas-de-presupuesto/iniciativas-de-inversion',
-        current: false,
-        icon: RiMoneyDollarCircleLine,
-        iconColor: 'text-indigo-900',
-      },
-      {
-        key: 'improvementProject',
-        title: 'Proyectos de mejora',
-        href: '/fichas-de-presupuesto/proyectos-de-mejora',
-        current: false,
-        icon: RiMoneyDollarCircleLine,
-        iconColor: 'text-indigo-900',
-      },
-    ],
-  },
-  {
-    key: 'financingSources',
-    title: 'Fuentes de Financiamiento',
-    href: '/fuentes-de-financiamiento',
-    current: false,
-    icon: RiMoneyDollarCircleLine,
-    iconColor: 'text-indigo-900',
-  },
-  {
-    key: 'measureUnits',
-    title: 'Unidades de medida',
-    href: '/unidades-de-medida',
-    current: false,
-    icon: RiPencilRuler2Line,
-    iconColor: 'text-sky-900',
   },
 ];
