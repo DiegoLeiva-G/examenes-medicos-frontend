@@ -1,5 +1,5 @@
 import { type MedicalExaminationGetAllResponseEntity } from '../../domain';
-import { type FC, useMemo } from 'react';
+import { type FC, useMemo, useRef } from 'react';
 import { Column, Row } from '../../../_global';
 import { Link } from 'react-router-dom';
 import { RiSaveLine } from '@remixicon/react';
@@ -9,6 +9,7 @@ import { type MedicalExaminationTypeEntity } from '../../../medicalExaminationTy
 import { type DoctorEntity } from '../../../doctor';
 import { medicalExaminationTypesTranslation } from '@core/helpers';
 import dayjs from 'dayjs';
+import { Editor } from '@tinymce/tinymce-react';
 
 enum FormFields {
   dateExam = 'dateExam',
@@ -56,6 +57,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
   doctors,
 }) => {
   const [form] = Form.useForm();
+  const editorRef = useRef(null);
 
   const medicalPatientOptions = useMemo(
     () =>
@@ -94,7 +96,9 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
         form
           .validateFields()
           .then((values: IMedicalExaminationFormValues) => {
-            onSubmitData(values);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            onSubmitData({ ...values, observation: editorRef.current?.getContent() || '' });
           })
           .catch(() => {});
       }}
@@ -174,18 +178,47 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
             required
             label="Observaciones"
             rules={[{ required: true, message: 'Debe ingresar las observaciones' }]}
-            initialValue={medicalExamination?.observation}
-            name={FormFields.observation}
           >
-            <Input.TextArea placeholder="Ingrese las observaciones..." disabled={loading} />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item label="Anexos" initialValue={medicalExamination?.anexes} name={FormFields.anexes}>
-            <Input.TextArea placeholder="Ingrese el/los anexo(s)..." disabled={loading} />
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExamination?.observation || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
           </Form.Item>
         </Column>
       </Row>
@@ -241,13 +274,97 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
           <Form.Item
-            required
-            label="Conclusión"
-            rules={[{ required: true, message: 'Debe ingresar la conclusión' }]}
-            initialValue={medicalExamination?.conclusion}
-            name={FormFields.conclusion}
+            label="Anexos"
           >
-            <Input.TextArea placeholder="Ingrese la conclusión..." disabled={loading} />
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExamination?.anexes || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item
+            label="Conclusión"
+          >
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExamination?.conclusion || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
           </Form.Item>
         </Column>
       </Row>

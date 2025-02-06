@@ -15,12 +15,18 @@ export class MedicalExaminationDatasourceImpl implements MedicalExaminationDatas
   public async getMedicalExaminations({
     page,
     limit,
-  }: BaseListFilters): Promise<IApiResponse<PaginationEntity<MedicalExaminationGetAllResponseEntity[]>>> {
+  }: BaseListFilters, type: string[],): Promise<IApiResponse<PaginationEntity<MedicalExaminationGetAllResponseEntity[]>>> {
+    const urlEncodedData = new URLSearchParams();
+    urlEncodedData.append('type2', JSON.stringify(type));
     return fetch(
-      import.meta.env.VITE_API_BASE_URL + '/medical-examinations?page=' + page + '&limit=' + limit,
+      import.meta.env.VITE_API_BASE_URL + '/medical-examinations/listar?page=' + page + '&limit=' + limit,
       {
-        method: 'GET',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         credentials: 'include',
+        body: urlEncodedData.toString(),
       },
     ).then(response => response.json());
   }

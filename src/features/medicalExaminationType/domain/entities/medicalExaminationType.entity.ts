@@ -9,7 +9,6 @@ export class MedicalExaminationTypeEntity {
     public id: string,
     public name: string,
     public type: MedicalExaminationType,
-
     public deleted?: boolean | null,
     public createdAt?: Date | null,
     public updatedAt?: Date | null,

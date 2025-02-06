@@ -17,8 +17,9 @@ export class MedicalExaminationRepositoryImpl implements MedicalExaminationRepos
 
   public async getMedicalExaminations(
     filters: BaseListFilters,
+    type: string[],
   ): Promise<IApiResponse<PaginationEntity<MedicalExaminationGetAllResponseEntity[]>>> {
-    return await this.datasource.getMedicalExaminations(filters);
+    return await this.datasource.getMedicalExaminations(filters, type);
   }
 
   public async getMedicalExaminationById(

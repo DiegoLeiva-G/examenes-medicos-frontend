@@ -12,3 +12,4 @@ export * from './RangeDatePicker.tsx';
 export * from './RangeDatePicker2.tsx';
 export * from './Select';
 export * from './DatePicker';
+export * from './Editor.tsx'

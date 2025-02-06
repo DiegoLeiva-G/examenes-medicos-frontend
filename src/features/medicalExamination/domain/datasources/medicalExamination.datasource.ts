@@ -9,6 +9,7 @@ import { type PaginationEntity } from '../../../_global';
 export abstract class MedicalExaminationDatasource {
   abstract getMedicalExaminations(
     filters: BaseListFilters,
+    type: string[],
   ): Promise<IApiResponse<PaginationEntity<MedicalExaminationGetAllResponseEntity[]>>>;
   abstract getMedicalExaminationById(id: MedicalExaminationEntity['id']): Promise<IApiResponse<MedicalExaminationGetByIdResponseEntity>>;
   abstract deleteMedicalExamination(id: MedicalExaminationEntity['id']): Promise<IApiResponse<MedicalExaminationDeleteResponseEntity>>;

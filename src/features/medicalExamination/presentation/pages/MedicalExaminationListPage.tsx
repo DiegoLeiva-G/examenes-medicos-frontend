@@ -1,19 +1,21 @@
 import { type FC, useCallback, useMemo, useState } from 'react';
 import { useNotification } from '@core/contexts';
 import { useFilters2 } from '@core/hooks';
-import { RiAddLine, RiDeleteBinLine, RiHome4Line, RiSearchLine } from '@remixicon/react';
+import { RiAddLine, RiDeleteBinLine, RiHome4Line } from '@remixicon/react';
 import { BreadCrumb, Container, DocumentMetadata } from '../../../_global';
 import { deleteMedicalExamination } from './controller.ts';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { type MedicalExaminationEntity, type MedicalExaminationGetAllResponseEntity } from '../../domain';
 import { type loaderMedicalExaminationList, type medicalExaminationDynamicFilters } from '../dataFetching';
-import { Table, type TableProps } from 'antd';
+import { Select, Table, type TableProps } from 'antd';
+import { medicalExaminationTypesTranslation } from '@core/helpers';
+import { MedicalExaminationType } from '../../../medicalExaminationType';
 
 export const MedicalExaminationListPage: FC = () => {
   const { medicalExaminations, filters } = useLoaderData<typeof loaderMedicalExaminationList>();
   const { setNotification } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const { onChangeSearch, onChangePageLimit, onChangePage } = useFilters2<medicalExaminationDynamicFilters>(filters);
+  const { onChangePageLimit, onChangePage, onChangeFilter } = useFilters2<medicalExaminationDynamicFilters>(filters);
   const navigate = useNavigate();
 
   const handleOnDeleteMedicalExamination = useCallback(
@@ -66,6 +68,16 @@ export const MedicalExaminationListPage: FC = () => {
         ),
       },
       {
+        title: 'Tipo del examen',
+        key: 'medicalExaminationType',
+        render: (_, item) => `${medicalExaminationTypesTranslation[item.medicalExaminationType.type]}`,
+      },
+      {
+        title: 'Nombre del tipo de examen',
+        key: 'medicalExaminationTypeName',
+        render: (_, item) => `${item.medicalExaminationType.name}`,
+      },
+      {
         title: 'Fecha del examen',
         key: 'dateExam',
         render: (_, item) => `${item.dateExam}`,
@@ -112,37 +124,47 @@ export const MedicalExaminationListPage: FC = () => {
       <BreadCrumb title={`Lista de examenes médicos`} navItems={navItems} />
       <Container>
         <div className="mx-auto lg:mx-0">
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <RiSearchLine className="h-5 w-5 text-gray-400 dark:text-gray-400" aria-hidden="true" />
+          <div className="flex justify-between w-full">
+            <div className="flex gap-4">
+              <div className="w-44 font-semibold dark:text-gray-50">
+                Mes:
+                <Select
+                  defaultValue={filters.dynamics?.medicalExaminationType.value || undefined}
+                  placeholder="Seleccione el tipo de examen médico..."
+                  onChange={value => onChangeFilter('medicalExaminationType', value)}
+                  className="block w-full rounded-md"
+                >
+                  <Select.Option value="mostrar-todo">Mostrar todo</Select.Option>
+                  <Select.Option value={MedicalExaminationType.Ultrasound}>Ecografía</Select.Option>
+                  <Select.Option value={MedicalExaminationType.Ray}>Rayos</Select.Option>
+                  <Select.Option value={MedicalExaminationType.Resonance}>Resonancia</Select.Option>
+                </Select>
               </div>
-              <input
-                type="text"
-                className="block w-96 rounded-md border-0 py-1.5 pl-10 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 dark:focus:ring-primary-500 dark:bg-gray-700 sm:text-sm sm:leading-6"
-                placeholder="Buscar..."
-                onChange={onChangeSearch}
-                defaultValue={filters.search}
-              />
             </div>
-            <div className="flex justify-end">
-              <Link
-                to="crear"
-                className="inline-flex items-center gap-x-1.5 rounded-md bg-primary-900 dark:bg-primary-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm
-            hover:bg-primary-500
-            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-              >
-                <RiAddLine aria-hidden="true" className="-mr-0.5 h-5 w-5" />
-                Crear examen médico
-              </Link>
+
+            <div>
+              <div>&nbsp;</div>
+              <div className="flex justify-end">
+                <Link
+                  to="crear"
+                  className="inline-flex items-center gap-x-1.5 rounded-md bg-primary-900 dark:bg-primary-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm
+          hover:bg-primary-500 dark:hover:bg-primary-800
+          focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                >
+                  <RiAddLine aria-hidden="true" className="-mr-0.5 h-5 w-5" />
+                  Crear examen médico
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-        <div className="mx-auto gap-x-8 gap-y-16 border-t border-gray-200 dark:border-gray-600 pt-5 mt-5 lg:mx-0 lg:max-w-none">
+        <div
+          className="mx-auto gap-x-8 gap-y-16 border-t border-gray-200 dark:border-gray-600 pt-5 mt-5 lg:mx-0 lg:max-w-none">
           <div className="flow-root">
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg dark:ring-white dark:ring-opacity-10">
+                <div
+                  className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg dark:ring-white dark:ring-opacity-10">
                   <Table
                     columns={columns}
                     dataSource={medicalExaminations.results}
