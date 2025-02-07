@@ -1,7 +1,7 @@
 import { type FC, useCallback, useMemo, useState } from 'react';
 import { useNotification } from '@core/contexts';
 import { useFilters2 } from '@core/hooks';
-import { RiAddLine, RiDeleteBinLine, RiHome4Line } from '@remixicon/react';
+import { RiAddLine, RiDeleteBinLine, RiHome4Line, RiFileTextLine } from '@remixicon/react';
 import { BreadCrumb, Container, DocumentMetadata } from '../../../_global';
 import { deleteMedicalExamination } from './controller.ts';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
@@ -10,12 +10,14 @@ import { type loaderMedicalExaminationList, type medicalExaminationDynamicFilter
 import { Select, Table, type TableProps } from 'antd';
 import { medicalExaminationTypesTranslation } from '@core/helpers';
 import { MedicalExaminationType } from '../../../medicalExaminationType';
+import pdfMake from 'pdfmake/build/pdfmake';
+import 'pdfmake/build/vfs_fonts';
 
 export const MedicalExaminationListPage: FC = () => {
   const { medicalExaminations, filters } = useLoaderData<typeof loaderMedicalExaminationList>();
   const { setNotification } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const { onChangePageLimit, onChangePage, onChangeFilter } = useFilters2<medicalExaminationDynamicFilters>(filters);
+  const { onChangePageLimit, onChangePage } = useFilters2<medicalExaminationDynamicFilters>(filters);
   const navigate = useNavigate();
 
   const handleOnDeleteMedicalExamination = useCallback(
@@ -53,6 +55,26 @@ export const MedicalExaminationListPage: FC = () => {
     [medicalExaminations, navigate, onChangePage, setNotification],
   );
 
+  const generatePDF = (item: MedicalExaminationGetAllResponseEntity) => {
+    const documentDefinition: any = {
+      content: [
+        {
+          text: `${medicalExaminationTypesTranslation[item.medicalExaminationType.type]} ${item.medicalExaminationType.name}`,
+          style: 'header',
+        },
+        { text: `Paciente: ${item.medicalPatient.name} ${item.medicalPatient.lastName}`, margin: [0, 10] },
+        { text: `Tipo de Examen: ${medicalExaminationTypesTranslation[item.medicalExaminationType.type]}` },
+        { text: `Nombre del Examen: ${item.medicalExaminationType.name}` },
+        { text: `Fecha del Examen: ${item.dateExam}`, margin: [0, 10] },
+      ],
+      styles: {
+        header: { fontSize: 18, bold: true, alignment: 'center' },
+      },
+    };
+
+    pdfMake.createPdf(documentDefinition).open();
+  };
+
   const columns: TableProps<MedicalExaminationGetAllResponseEntity>['columns'] = useMemo(
     () => [
       {
@@ -83,20 +105,30 @@ export const MedicalExaminationListPage: FC = () => {
         render: (_, item) => `${item.dateExam}`,
       },
       {
-        title: '',
-        key: 'action',
+        title: 'Acciones',
+        key: 'actions',
         render: (_, item) => (
-          <button
-            onClick={() => handleOnDeleteMedicalExamination(item.id)}
-            type="button"
-            className="inline-flex items-center gap-x-1.5 rounded-md bg-red-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm
-            hover:bg-red-500
-            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600
-            disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200"
-          >
-            Eliminar
-            <RiDeleteBinLine aria-hidden="true" className="-mr-0.5 h-5 w-5" />
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => generatePDF(item)}
+              type="button"
+              className="inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm
+              hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+            >
+              Ver PDF
+              <RiFileTextLine aria-hidden="true" className="h-5 w-5" />
+            </button>
+
+            <button
+              onClick={() => handleOnDeleteMedicalExamination(item.id)}
+              type="button"
+              className="inline-flex items-center gap-x-1.5 rounded-md bg-red-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm
+              hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+              Eliminar
+              <RiDeleteBinLine aria-hidden="true" className="h-5 w-5" />
+            </button>
+          </div>
         ),
       },
     ],
@@ -128,12 +160,7 @@ export const MedicalExaminationListPage: FC = () => {
             <div className="flex gap-4">
               <div className="w-44 font-semibold dark:text-gray-50">
                 Mes:
-                <Select
-                  defaultValue={filters.dynamics?.medicalExaminationType.value || undefined}
-                  placeholder="Seleccione el tipo de examen médico..."
-                  onChange={value => onChangeFilter('medicalExaminationType', value)}
-                  className="block w-full rounded-md"
-                >
+                <Select placeholder="Seleccione el tipo de examen médico..." className="block w-full rounded-md">
                   <Select.Option value="mostrar-todo">Mostrar todo</Select.Option>
                   <Select.Option value={MedicalExaminationType.Ultrasound}>Ecografía</Select.Option>
                   <Select.Option value={MedicalExaminationType.Ray}>Rayos</Select.Option>
@@ -158,13 +185,11 @@ export const MedicalExaminationListPage: FC = () => {
             </div>
           </div>
         </div>
-        <div
-          className="mx-auto gap-x-8 gap-y-16 border-t border-gray-200 dark:border-gray-600 pt-5 mt-5 lg:mx-0 lg:max-w-none">
+        <div className="mx-auto gap-x-8 gap-y-16 border-t border-gray-200 dark:border-gray-600 pt-5 mt-5 lg:mx-0 lg:max-w-none">
           <div className="flow-root">
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                <div
-                  className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg dark:ring-white dark:ring-opacity-10">
+                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg dark:ring-white dark:ring-opacity-10">
                   <Table
                     columns={columns}
                     dataSource={medicalExaminations.results}

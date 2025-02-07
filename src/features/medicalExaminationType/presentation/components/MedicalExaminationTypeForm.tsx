@@ -52,18 +52,6 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-6">
           <Form.Item
-            required
-            label="Nombre"
-            rules={[{ required: true, message: 'Debe ingresar el nombre' }]}
-            initialValue={medicalExaminationType?.name}
-            name={FormFields.name}
-          >
-            <Input placeholder="Ingrese el nombre..." disabled={loading} />
-          </Form.Item>
-        </Column>
-
-        <Column colSpan="col-span-6">
-          <Form.Item
             label="Tipo de examen médico"
             name={FormFields.type}
             rules={[{ required: true, message: 'El tipo es requerido' }]}
@@ -77,6 +65,18 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
               options={medicalExaminationTypeOptions}
               disabled={loading}
             />
+          </Form.Item>
+        </Column>
+
+        <Column colSpan="col-span-6">
+          <Form.Item
+            required
+            label="Nombre"
+            rules={[{ required: true, message: 'Debe ingresar el nombre' }]}
+            initialValue={medicalExaminationType?.name}
+            name={FormFields.name}
+          >
+            <Input placeholder="Ingrese el nombre..." disabled={loading} />
           </Form.Item>
         </Column>
       </Row>
