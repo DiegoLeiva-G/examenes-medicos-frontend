@@ -23,6 +23,7 @@ export const MedicalExaminationListPage: FC = () => {
   const handleOnDeleteMedicalExamination = useCallback(
     (id: MedicalExaminationEntity['id']) => {
       setLoading(true);
+
       deleteMedicalExamination.execute(id).then(response => {
         setLoading(false);
         const titleNotification = 'Eliminación del exámen médico';
@@ -56,8 +57,12 @@ export const MedicalExaminationListPage: FC = () => {
   );
 
   const generatePDF = (item: MedicalExaminationGetAllResponseEntity) => {
-    const documentDefinition: any = {
-      content: [
+    try {
+      // Convertir el campo `content` de JSON a objeto
+      const content = item.content ? JSON.parse(item.content) : {};
+
+      // Construir el contenido del PDF dinámicamente
+      const documentContent = [
         {
           text: `${medicalExaminationTypesTranslation[item.medicalExaminationType.type]} ${item.medicalExaminationType.name}`,
           style: 'header',
@@ -66,13 +71,49 @@ export const MedicalExaminationListPage: FC = () => {
         { text: `Tipo de Examen: ${medicalExaminationTypesTranslation[item.medicalExaminationType.type]}` },
         { text: `Nombre del Examen: ${item.medicalExaminationType.name}` },
         { text: `Fecha del Examen: ${item.dateExam}`, margin: [0, 10] },
-      ],
-      styles: {
-        header: { fontSize: 18, bold: true, alignment: 'center' },
-      },
-    };
+      ];
 
-    pdfMake.createPdf(documentDefinition).open();
+      // Agregar campos del `content` solo si tienen valor
+      if (content.observation) {
+        documentContent.push({ text: `Observación: ${content.observation}`, margin: [0, 5] });
+      }
+      if (content.dimension) {
+        documentContent.push({ text: `Dimensión: ${content.dimension}`, margin: [0, 5] });
+      }
+      if (content.measures) {
+        documentContent.push({ text: `Medidas: ${content.measures}`, margin: [0, 5] });
+      }
+      if (content.diagnosticDimension) {
+        documentContent.push({ text: `Diagnóstico de Dimensión: ${content.diagnosticDimension}`, margin: [0, 5] });
+      }
+      if (content.anexes) {
+        documentContent.push({ text: `Anexos: ${content.anexes}`, margin: [0, 5] });
+      }
+      if (content.diagnosticAnexes) {
+        documentContent.push({ text: `Diagnóstico de Anexos: ${content.diagnosticAnexes}`, margin: [0, 5] });
+      }
+      if (content.conclusion) {
+        documentContent.push({ text: `Conclusión: ${content.conclusion}`, margin: [0, 5] });
+      }
+
+      // Definición del documento PDF
+      const documentDefinition: any = {
+        content: documentContent,
+        styles: {
+          header: { fontSize: 18, bold: true, alignment: 'center' },
+        },
+      };
+
+      // Generar el PDF
+      pdfMake.createPdf(documentDefinition).open();
+    } catch (error) {
+      console.error('Error al parsear el contenido:', error);
+      setNotification({
+        type: 'error',
+        title: 'Error al generar el PDF',
+        message: 'Hubo un problema al procesar el contenido del examen.',
+      });
+    }
   };
 
   const columns: TableProps<MedicalExaminationGetAllResponseEntity>['columns'] = useMemo(
@@ -132,7 +173,7 @@ export const MedicalExaminationListPage: FC = () => {
         ),
       },
     ],
-    [handleOnDeleteMedicalExamination],
+    [generatePDF, handleOnDeleteMedicalExamination],
   );
 
   const navItems = useMemo(

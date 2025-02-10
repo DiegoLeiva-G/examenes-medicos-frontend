@@ -1,5 +1,5 @@
 import { type MedicalExaminationGetAllResponseEntity } from '../../domain';
-import { type FC, useMemo, useRef } from 'react';
+import { type FC, useMemo, useRef, useState } from 'react';
 import { Column, Row } from '../../../_global';
 import { Link } from 'react-router-dom';
 import { RiSaveLine } from '@remixicon/react';
@@ -46,6 +46,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
 }) => {
   const [form] = Form.useForm();
   const editorRef = useRef(null);
+  const [selectedType, setSelectedType] = useState<MedicalExaminationTypeEntity | null>(null);
 
   const medicalPatientOptions = useMemo(
     () =>
@@ -74,12 +75,46 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
     [doctors],
   );
 
+  const handleTypeChange = (value: string) => {
+    const selected = medicalExaminationTypes.find((type) => type.id === value);
+    if (selected) {
+      setSelectedType(selected);
+      const content = `
+        <h3>Observación:</h3>
+        <p>${selected.observation || ''}</p>
+        <h3>Dimensión:</h3>
+        <p>${selected.dimension || ''}</p>
+        <h3>Medidas:</h3>
+        <p>${selected.measures || ''}</p>
+        <h3>Diagnóstico de Dimensión:</h3>
+        <p>${selected.diagnosticDimension || ''}</p>
+        <h3>Anexos:</h3>
+        <p>${selected.anexes || ''}</p>
+        <h3>Diagnóstico de Anexos:</h3>
+        <p>${selected.diagnosticAnexes || ''}</p>
+        <h3>Conclusión:</h3>
+        <p>${selected.conclusion || ''}</p>
+      `;
+      if (editorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        editorRef.current.setContent(content); // Actualizar el contenido del editor
+      }
+    } else {
+      setSelectedType(null); // Limpiar el estado si no hay selección
+      if (editorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        editorRef.current.setContent(''); // Limpiar el contenido del editor
+      }
+    }
+  };
   return (
     <Form
       form={form}
       layout="vertical"
       method="post"
-      onSubmitCapture={event => {
+      onSubmitCapture={(event) => {
         event.preventDefault();
         form
           .validateFields()
@@ -105,6 +140,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
               showSearch
               optionFilterProp="label"
               options={medicalExaminationTypeOptions}
+              onChange={handleTypeChange}
             />
           </Form.Item>
         </Column>
@@ -192,15 +228,17 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
