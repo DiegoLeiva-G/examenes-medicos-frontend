@@ -43,7 +43,13 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
   loading,
 }) => {
   const [form] = Form.useForm();
-  const editorRef = useRef(null);
+  const observationEditorRef = useRef(null);
+  const dimensionEditorRef = useRef(null);
+  const measuresEditorRef = useRef(null);
+  const diagnosticDimensionEditorRef = useRef(null);
+  const anexesEditorRef = useRef(null);
+  const diagnosticAnexesEditorRef = useRef(null);
+  const conclusionEditorRef = useRef(null);
 
   const medicalExaminationTypeOptions = useMemo(
     () => Object.entries(medicalExaminationTypesTranslation).map(value => ({ label: value[1], value: value[0] })),
@@ -62,8 +68,13 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           .then((values: IMedicalExaminationTypeFormValues) => {
             onSubmitData({
               ...values,
-              observation: editorRef.current?.getContent() || '',
-              dimension: editorRef.current?.getContent() || '',
+              observation: observationEditorRef.current?.getContent() || '',
+              dimension: dimensionEditorRef.current?.getContent() || '',
+              measures: measuresEditorRef.current?.getContent() || '',
+              diagnosticDimension: diagnosticDimensionEditorRef.current?.getContent() || '',
+              anexes: anexesEditorRef.current?.getContent() || '',
+              diagnosticAnexes: diagnosticAnexesEditorRef.current?.getContent() || '',
+              conclusion: conclusionEditorRef.current?.getContent() || '',
             });
           })
           .catch(() => {});
@@ -105,15 +116,13 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
         <Column colSpan="col-span-full">
           <Form.Item
             label="Observaciones"
-            name={FormFields.observation}
-            rules={[{ required: true, message: 'Las observaciones son requeridas' }]}
           >
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, observationEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                observationEditorRef.current = observationEditor;
               }}
               initialValue={medicalExaminationType?.observation || ''}
               init={{
@@ -137,15 +146,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
@@ -156,15 +167,13 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
         <Column colSpan="col-span-full">
           <Form.Item
             label="Dimensiones"
-            name={FormFields.dimension}
-            rules={[{ required: true, message: 'Las dimensiones son requeridas' }]}
           >
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, dimensionEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                dimensionEditorRef.current = dimensionEditor;
               }}
               initialValue={medicalExaminationType?.dimension || ''}
               init={{
@@ -188,15 +197,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
@@ -208,10 +219,10 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           <Form.Item label="Medidas">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, measuresEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                measuresEditorRef.current = measuresEditor;
               }}
               initialValue={medicalExaminationType?.measures || ''}
               init={{
@@ -235,15 +246,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
@@ -255,10 +268,10 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           <Form.Item label="Diagnóstico de dimensiones">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, diagnosticDimensionEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                diagnosticDimensionEditorRef.current = diagnosticDimensionEditor;
               }}
               initialValue={medicalExaminationType?.diagnosticDimension || ''}
               init={{
@@ -282,15 +295,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
@@ -302,10 +317,10 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           <Form.Item label="Anexos">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, anexesEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                anexesEditorRef.current = anexesEditor;
               }}
               initialValue={medicalExaminationType?.anexes || ''}
               init={{
@@ -329,15 +344,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
@@ -349,10 +366,10 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           <Form.Item label="Diagnóstico de anexos">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, diagnosticAnexesEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                diagnosticAnexesEditorRef.current = diagnosticAnexesEditor;
               }}
               initialValue={medicalExaminationType?.diagnosticAnexes || ''}
               init={{
@@ -376,15 +393,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
@@ -396,10 +415,10 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           <Form.Item label="Conclusión">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, conclusionEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                conclusionEditorRef.current = conclusionEditor;
               }}
               initialValue={medicalExaminationType?.conclusion || ''}
               init={{
@@ -423,15 +442,17 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
                   'code',
                   'help',
                   'wordcount',
+                  'autoresize',
                 ],
                 toolbar:
                   'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
                 resize: true,
                 // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
+                autoresize_min_height: 200,
                 // eslint-disable-next-line camelcase
-                min_height: 200,
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
               }}
             />
           </Form.Item>
