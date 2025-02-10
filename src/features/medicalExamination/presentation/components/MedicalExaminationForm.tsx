@@ -3,7 +3,7 @@ import { type FC, useMemo, useRef } from 'react';
 import { Column, Row } from '../../../_global';
 import { Link } from 'react-router-dom';
 import { RiSaveLine } from '@remixicon/react';
-import { DatePicker, Form, Input, Select } from 'antd';
+import { DatePicker, Form, Select } from 'antd';
 import { type MedicalPatientEntity } from '../../../medicalPatient';
 import { type MedicalExaminationTypeEntity } from '../../../medicalExaminationType';
 import { type DoctorEntity } from '../../../doctor';
@@ -13,13 +13,7 @@ import { Editor } from '@tinymce/tinymce-react';
 
 enum FormFields {
   dateExam = 'dateExam',
-  observation = 'observation',
-  anexes = 'anexes',
-  conclusion = 'conclusion',
-  titleDimension = 'titleDimension',
-  nameDimension = 'nameDimension',
-  measureDimension = 'measureDimension',
-  descriptionDimension = 'descriptionDimension',
+  content = 'content',
   medicalPatientId = 'medicalPatientId',
   medicalExaminationTypeId = 'medicalExaminationTypeId',
   doctorId = 'doctorId',
@@ -27,13 +21,7 @@ enum FormFields {
 
 export interface IMedicalExaminationFormValues {
   [FormFields.dateExam]: Date;
-  [FormFields.observation]: string;
-  [FormFields.anexes]: string;
-  [FormFields.conclusion]: string;
-  [FormFields.titleDimension]: string;
-  [FormFields.nameDimension]: string;
-  [FormFields.measureDimension]: string;
-  [FormFields.descriptionDimension]: string;
+  [FormFields.content]: string;
   [FormFields.medicalPatientId]: string;
   [FormFields.medicalExaminationTypeId]: string;
   [FormFields.doctorId]: string;
@@ -98,7 +86,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
           .then((values: IMedicalExaminationFormValues) => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            onSubmitData({ ...values, observation: editorRef.current?.getContent() || '' });
+            onSubmitData({ ...values, content: editorRef.current?.getContent() || '' });
           })
           .catch(() => {});
       }}
@@ -174,11 +162,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item
-            required
-            label="Observaciones"
-            rules={[{ required: true, message: 'Debe ingresar las observaciones' }]}
-          >
+          <Form.Item label="Contenido">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
               onInit={(_evt, editor) => {
@@ -186,153 +170,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
                 // @ts-expect-error
                 editorRef.current = editor;
               }}
-              initialValue={medicalExamination?.observation || ''}
-              init={{
-                menubar: false,
-                plugins: [
-                  'advlist',
-                  'autolink',
-                  'lists',
-                  'link',
-                  'image',
-                  'charmap',
-                  'preview',
-                  'anchor',
-                  'searchreplace',
-                  'visualblocks',
-                  'code',
-                  'fullscreen',
-                  'insertdatetime',
-                  'media',
-                  'table',
-                  'code',
-                  'help',
-                  'wordcount',
-                ],
-                toolbar:
-                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
-                resize: true,
-                // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
-                // eslint-disable-next-line camelcase
-                min_height: 200,
-              }}
-            />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item
-            label="Dimensión"
-            initialValue={medicalExamination?.titleDimension}
-            name={FormFields.titleDimension}
-          >
-            <Input placeholder="Ingrese el nombre de la dimensión..." disabled={loading} />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item
-            label="Descripción de la dimensión"
-            initialValue={medicalExamination?.nameDimension}
-            name={FormFields.nameDimension}
-          >
-            <Input.TextArea placeholder="Ingrese la descripción de la dimensión..." disabled={loading} />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item
-            label="Medidas"
-            initialValue={medicalExamination?.measureDimension}
-            name={FormFields.measureDimension}
-          >
-            <Input.TextArea placeholder="Ingrese las medidas de la dimensión..." disabled={loading} />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item
-            label="Descripción de la Dimensión"
-            initialValue={medicalExamination?.descriptionDimension}
-            name={FormFields.descriptionDimension}
-          >
-            <Input.TextArea placeholder="Ingrese la descripción de la dimensión..." disabled={loading} />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item
-            label="Anexos"
-          >
-            <Editor
-              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                editorRef.current = editor;
-              }}
-              initialValue={medicalExamination?.anexes || ''}
-              init={{
-                menubar: false,
-                plugins: [
-                  'advlist',
-                  'autolink',
-                  'lists',
-                  'link',
-                  'image',
-                  'charmap',
-                  'preview',
-                  'anchor',
-                  'searchreplace',
-                  'visualblocks',
-                  'code',
-                  'fullscreen',
-                  'insertdatetime',
-                  'media',
-                  'table',
-                  'code',
-                  'help',
-                  'wordcount',
-                ],
-                toolbar:
-                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
-                height: 200,
-                resize: true,
-                // eslint-disable-next-line camelcase
-                autoresize_bottom_margin: 10,
-                // eslint-disable-next-line camelcase
-                min_height: 200,
-              }}
-            />
-          </Form.Item>
-        </Column>
-      </Row>
-
-      <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-full">
-          <Form.Item
-            label="Conclusión"
-          >
-            <Editor
-              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                editorRef.current = editor;
-              }}
-              initialValue={medicalExamination?.conclusion || ''}
+              initialValue={medicalExamination?.content || ''}
               init={{
                 menubar: false,
                 plugins: [

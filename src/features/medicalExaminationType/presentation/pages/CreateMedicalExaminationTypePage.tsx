@@ -17,7 +17,7 @@ export const CreateMedicalExaminationTypePage: FC = () => {
       setLoading(true);
 
       createMedicalExaminationType
-        .execute({ name: formValues.name, type: formValues.type as MedicalExaminationType })
+        .execute({ ...formValues, name: formValues.name, type: formValues.type as MedicalExaminationType })
         .then(response => {
           setLoading(false);
           const titleNotification = 'Creación de tipo de examen médico';

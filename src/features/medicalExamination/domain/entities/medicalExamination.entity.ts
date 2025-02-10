@@ -6,13 +6,7 @@ export class MedicalExaminationEntity {
   constructor(
     public id: string,
     public dateExam: string,
-    public observation?: string | null,
-    public anexes?: string | null,
-    public conclusion?: string | null,
-    public titleDimension?: string | null,
-    public nameDimension?: string | null,
-    public measureDimension?: string | null,
-    public descriptionDimension?: string | null,
+    public content?: string | null,
     public medicalPatientId?: string | null,
     public medicalExaminationTypeId?: string | null,
     public doctorId?: string | null,
@@ -48,13 +42,7 @@ export class MedicalExaminationGetAllResponseEntity implements Pick<MedicalExami
       name: MedicalExaminationTypeEntity['name'];
       type: MedicalExaminationType;
     },
-    public observation?: string | null,
-    public anexes?: string | null,
-    public conclusion?: string | null,
-    public titleDimension?: string | null,
-    public nameDimension?: string | null,
-    public measureDimension?: string | null,
-    public descriptionDimension?: string | null,
+    public content?: string,
     public createdAt?: Date | null,
   ) {}
 }
@@ -85,13 +73,7 @@ export class MedicalExaminationGetByIdResponseEntity implements Pick<MedicalExam
       name: MedicalExaminationTypeEntity['name'];
       type: MedicalExaminationType;
     },
-    public observation?: string | null,
-    public anexes?: string | null,
-    public conclusion?: string | null,
-    public titleDimension?: string | null,
-    public nameDimension?: string | null,
-    public measureDimension?: string | null,
-    public descriptionDimension?: string | null,
+    public content?: string,
     public createdAt?: Date | null,
   ) {}
 }
@@ -100,13 +82,7 @@ export class MedicalExaminationCreateResponseEntity implements Omit<MedicalExami
   constructor(
     public id: MedicalExaminationEntity['id'],
     public dateExam: MedicalExaminationEntity['dateExam'],
-    public observation?: MedicalExaminationEntity['observation'],
-    public anexes?: MedicalExaminationEntity['anexes'],
-    public conclusion?: MedicalExaminationEntity['conclusion'],
-    public titleDimension?: MedicalExaminationEntity['titleDimension'],
-    public nameDimension?: MedicalExaminationEntity['nameDimension'],
-    public measureDimension?: MedicalExaminationEntity['measureDimension'],
-    public descriptionDimension?: MedicalExaminationEntity['descriptionDimension'],
+    public content?: MedicalExaminationEntity['content'],
     public medicalPatientId?: MedicalExaminationEntity['medicalPatientId'],
     public medicalExaminationTypeId?: MedicalExaminationEntity['medicalExaminationTypeId'],
     public doctorId?: MedicalExaminationEntity['doctorId'],
@@ -120,13 +96,7 @@ export class MedicalExaminationUpdateResponseEntity
   constructor(
     public id: MedicalExaminationEntity['id'],
     public dateExam: MedicalExaminationEntity['dateExam'],
-    public observation?: MedicalExaminationEntity['observation'],
-    public anexes?: MedicalExaminationEntity['anexes'],
-    public conclusion?: MedicalExaminationEntity['conclusion'],
-    public titleDimension?: MedicalExaminationEntity['titleDimension'],
-    public nameDimension?: MedicalExaminationEntity['nameDimension'],
-    public measureDimension?: MedicalExaminationEntity['measureDimension'],
-    public descriptionDimension?: MedicalExaminationEntity['descriptionDimension'],
+    public content?: MedicalExaminationEntity['content'],
     public medicalPatientId?: MedicalExaminationEntity['medicalPatientId'],
     public medicalExaminationTypeId?: MedicalExaminationEntity['medicalExaminationTypeId'],
     public doctorId?: MedicalExaminationEntity['doctorId'],
@@ -142,13 +112,7 @@ export class MedicalExaminationFormEntity
     Pick<
       MedicalExaminationEntity,
       | 'dateExam'
-      | 'observation'
-      | 'anexes'
-      | 'conclusion'
-      | 'titleDimension'
-      | 'nameDimension'
-      | 'measureDimension'
-      | 'descriptionDimension'
+      | 'content'
       | 'medicalPatientId'
       | 'medicalExaminationTypeId'
       | 'doctorId'
@@ -156,13 +120,7 @@ export class MedicalExaminationFormEntity
 {
   constructor(
     public dateExam: MedicalExaminationEntity['dateExam'],
-    public observation?: MedicalExaminationEntity['observation'],
-    public anexes?: MedicalExaminationEntity['anexes'],
-    public conclusion?: MedicalExaminationEntity['conclusion'],
-    public titleDimension?: MedicalExaminationEntity['titleDimension'],
-    public nameDimension?: MedicalExaminationEntity['nameDimension'],
-    public measureDimension?: MedicalExaminationEntity['measureDimension'],
-    public descriptionDimension?: MedicalExaminationEntity['descriptionDimension'],
+    public content?: MedicalExaminationEntity['content'],
     public medicalPatientId?: MedicalExaminationEntity['medicalPatientId'],
     public medicalExaminationTypeId?: MedicalExaminationEntity['medicalExaminationTypeId'],
     public doctorId?: MedicalExaminationEntity['doctorId'],

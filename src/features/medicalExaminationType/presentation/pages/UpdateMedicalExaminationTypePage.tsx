@@ -21,6 +21,7 @@ export const UpdateMedicalExaminationTypePage: FC = () => {
 
       updateMedicalExaminationType
         .execute({
+          ...formValues,
           id: medicalExaminationTypeId,
           name: formValues.name,
           type: formValues.type as MedicalExaminationType,

@@ -1,23 +1,38 @@
-import { type MedicalExaminationTypeFormEntity } from '../../domain';
-import { type FC, useMemo } from 'react';
+import { type MedicalExaminationTypeGetAllResponseEntity } from '../../domain';
+import { type FC, useMemo, useRef } from 'react';
 import { Column, Row } from '../../../_global';
 import { Link } from 'react-router-dom';
 import { RiSaveLine } from '@remixicon/react';
 import { Form, Input, Select } from 'antd';
 import { medicalExaminationTypesTranslation } from '@core/helpers';
+import { Editor } from '@tinymce/tinymce-react';
 
 enum FormFields {
   name = 'name',
   type = 'type',
+  observation = 'observation',
+  dimension = 'dimension',
+  measures = 'measures',
+  diagnosticDimension = 'diagnosticDimension',
+  anexes = 'anexes',
+  diagnosticAnexes = 'diagnosticAnexes',
+  conclusion = 'conclusion',
 }
 
 export interface IMedicalExaminationTypeFormValues {
   [FormFields.name]: string;
   [FormFields.type]: string;
+  [FormFields.observation]: string;
+  [FormFields.dimension]: string;
+  [FormFields.measures]: string;
+  [FormFields.diagnosticDimension]: string;
+  [FormFields.anexes]: string;
+  [FormFields.diagnosticAnexes]: string;
+  [FormFields.conclusion]: string;
 }
 
 interface IMedicalExaminationTypeFormProps {
-  medicalExaminationType?: MedicalExaminationTypeFormEntity | null;
+  medicalExaminationType?: MedicalExaminationTypeGetAllResponseEntity | null;
   loading?: boolean;
   onSubmitData: (values: IMedicalExaminationTypeFormValues) => void;
 }
@@ -28,6 +43,7 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
   loading,
 }) => {
   const [form] = Form.useForm();
+  const editorRef = useRef(null);
 
   const medicalExaminationTypeOptions = useMemo(
     () => Object.entries(medicalExaminationTypesTranslation).map(value => ({ label: value[1], value: value[0] })),
@@ -44,7 +60,11 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
         form
           .validateFields()
           .then((values: IMedicalExaminationTypeFormValues) => {
-            onSubmitData(values);
+            onSubmitData({
+              ...values,
+              observation: editorRef.current?.getContent() || '',
+              dimension: editorRef.current?.getContent() || '',
+            });
           })
           .catch(() => {});
       }}
@@ -77,6 +97,343 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
             name={FormFields.name}
           >
             <Input placeholder="Ingrese el nombre..." disabled={loading} />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item
+            label="Observaciones"
+            name={FormFields.observation}
+            rules={[{ required: true, message: 'Las observaciones son requeridas' }]}
+          >
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.observation || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item
+            label="Dimensiones"
+            name={FormFields.dimension}
+            rules={[{ required: true, message: 'Las dimensiones son requeridas' }]}
+          >
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.dimension || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Medidas">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.measures || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Diagnóstico de dimensiones">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.diagnosticDimension || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Anexos">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.anexes || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Diagnóstico de anexos">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.diagnosticAnexes || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Conclusión">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                editorRef.current = editor;
+              }}
+              initialValue={medicalExaminationType?.conclusion || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                height: 200,
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+                // eslint-disable-next-line camelcase
+                min_height: 200,
+              }}
+            />
           </Form.Item>
         </Column>
       </Row>
