@@ -13,10 +13,12 @@ export const CreateMedicalExaminationPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+
   const handleOnSubmit = useCallback(
     (formValues: IMedicalExaminationFormValues) => {
       setLoading(true);
 
+      console.log({ formValues });
       createMedicalExamination
         .execute({  ...formValues, dateExam: formValues.dateExam.toISOString(), })
         .then(response => {

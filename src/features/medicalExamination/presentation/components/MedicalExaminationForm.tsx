@@ -109,6 +109,7 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
       }
     }
   };
+
   return (
     <Form
       form={form}

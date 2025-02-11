@@ -8,3 +8,4 @@ export * from './formatNumber';
 export * from './chileanDNI';
 export * from './getDefaultListFilter';
 export * from './medicalExaminationTypeTranslation';
+export * from './imagen64'

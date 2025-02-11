@@ -8,7 +8,7 @@ import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { type MedicalExaminationEntity, type MedicalExaminationGetAllResponseEntity } from '../../domain';
 import { type loaderMedicalExaminationList, type medicalExaminationDynamicFilters } from '../dataFetching';
 import { Select, Table, type TableProps } from 'antd';
-import { medicalExaminationTypesTranslation, textCapitalize } from '@core/helpers';
+import { apsaIcon, medicalExaminationTypesTranslation, textCapitalize } from '@core/helpers';
 import { MedicalExaminationType } from '../../../medicalExaminationType';
 import DOMPurify from 'dompurify';
 import htmlToPdfmake from 'html-to-pdfmake';
@@ -67,74 +67,92 @@ export const MedicalExaminationListPage: FC = () => {
 
       const documentContent = [
         {
+          columns: [
+            {
+              width: '50%',
+              stack: [
+                {
+                  text: `Nombre: ${item.medicalPatient.name} ${item.medicalPatient.lastName} ${item.medicalPatient.secondaryLastName || ''}`,
+                  style: 'sectionContent',
+                  margin: [0, 1.5],
+                },
+                {
+                  text: `Edad: ${item.medicalPatient.name} Años`,
+                  style: 'sectionContent',
+                  margin: [0, 1.5],
+                },
+                {
+                  text: `Fecha del examen: ${dayjs(item.dateExam).format('DD/MM/YYYY')}`,
+                  style: 'sectionContent',
+                  margin: [0, 1.5],
+                },
+              ],
+            },
+            {
+              width: '50%',
+              image: apsaIcon,
+              fit: [150, 150],
+              alignment: 'right',
+            },
+          ],
+          columnGap: 10,
+          margin: [0, 10],
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0,
+              y1: 0,
+              x2: 515,
+              y2: 0,
+              lineWidth: 1,
+              lineColor: '#cccccc',
+            },
+          ],
+          margin: [0, 10],
+        },
+        {
           text: `${medicalExaminationTypesTranslation[item.medicalExaminationType.type]} ${item.medicalExaminationType.name}`,
           style: 'header',
         },
-        {
-          text: `Nombre: ${item.medicalPatient.name} ${item.medicalPatient.lastName}`,
-          style: 'sectionContent',
-          margin: [],
-        },
-        {
-          text: `Fecha del Examen: ${dayjs(item.dateExam).format('DD/MM/YYYY')}`,
-          style: 'sectionContent',
-          margin: [0, 10],
-        },
       ];
+
+      documentContent.push({
+        text: `Hallazgos:`,
+        style: 'sectionTitle',
+        margin: [0, 5],
+      });
 
       if (content.observation) {
         const sanitizedHTML = DOMPurify.sanitize(content.observation);
         documentContent.push({
-          text: 'Observación:',
-          style: 'sectionTitle',
-          margin: [0, 10],
-        });
-        documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
         });
       }
 
       if (content.dimension) {
         const sanitizedHTML = DOMPurify.sanitize(content.dimension);
         documentContent.push({
-          text: 'Dimensión:',
-          style: 'sectionTitle',
-          margin: [0, 10],
-        });
-        documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
         });
       }
 
       if (content.measures) {
         const sanitizedHTML = DOMPurify.sanitize(content.measures);
         documentContent.push({
-          text: 'Medidas:',
-          style: 'sectionTitle',
-          margin: [0, 10],
-        });
-        documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
         });
       }
 
       if (content.diagnosticDimension) {
         const sanitizedHTML = DOMPurify.sanitize(content.diagnosticDimension);
         documentContent.push({
-          text: 'Diagnóstico de Dimensión:',
-          style: 'sectionTitle',
-          margin: [0, 10],
-        });
-        documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
         });
       }
 
@@ -148,21 +166,16 @@ export const MedicalExaminationListPage: FC = () => {
         documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
+          margin: [0, 1.5],
         });
       }
 
       if (content.diagnosticAnexes) {
         const sanitizedHTML = DOMPurify.sanitize(content.diagnosticAnexes);
         documentContent.push({
-          text: 'Diagnóstico de Anexos:',
-          style: 'sectionTitle',
-          margin: [0, 10],
-        });
-        documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
+          margin: [0, 1.5],
         });
       }
 
@@ -176,14 +189,13 @@ export const MedicalExaminationListPage: FC = () => {
         documentContent.push({
           stack: htmlToPdfmake(sanitizedHTML),
           style: 'sectionContent',
-          margin: [0, 5],
+          margin: [0, 1.5],
         });
       }
 
       if (item.doctor) {
         const doctorInfo = [];
 
-        // Agregar nombre del doctor si existe
         if (item.doctor.name && item.doctor.lastName) {
           doctorInfo.push({
             text: `Dr. ${item.doctor.name} ${item.doctor.lastName}`,
@@ -192,34 +204,30 @@ export const MedicalExaminationListPage: FC = () => {
           });
         }
 
-        // Determinar qué índices usar según el tipo de examen
         let professionIndices: number[] = [];
         let specializationIndex = -1;
 
         if (item.medicalExaminationType.type === MedicalExaminationType.Ultrasound) {
-          professionIndices = [1, 2]; // Mostrar profesiones en las posiciones [1, 2]
-          specializationIndex = 0; // Mostrar especialización en la posición [0]
+          professionIndices = [1, 2];
+          specializationIndex = 0;
         } else if (item.medicalExaminationType.type === MedicalExaminationType.Ray) {
-          professionIndices = [0]; // Mostrar profesión en la posición [0]
-          specializationIndex = -1; // No mostrar especialización
+          professionIndices = [0];
+          specializationIndex = -1;
         }
 
-        // Agregar profesiones en una disposición horizontal con guiones
         if (item.doctor.nameProfession && professionIndices.length > 0) {
           const professions = professionIndices
             .filter((index) => index >= 0 && index < item.doctor.nameProfession.length)
-            .map((index) => item.doctor.nameProfession[index]) // Obtener las profesiones
-            .join(' -'); // Unir las profesiones con un guion
+            .map((index) => item.doctor.nameProfession[index])
+            .join(' -');
 
-          // Añadir las profesiones como un solo texto
           doctorInfo.push({
             text: professions,
             style: 'doctorContent',
-            margin: [0, 5], // Margen externo
+            margin: [0, 5],
           });
         }
 
-        // Agregar especialización si el índice es válido
         if (
           item.doctor.specialization &&
           specializationIndex >= 0 &&
@@ -232,18 +240,17 @@ export const MedicalExaminationListPage: FC = () => {
           });
         }
 
-        // Agregar el bloque del doctor al contenido del PDF
         documentContent.push({
           columns: [
-            {}, // Columna vacía para empujar el contenido a la derecha
+            {},
             {
-              width: 'auto', // Ancho automático para ajustarse al contenido
-              alignment: 'center', // Centrar el contenido dentro del bloque
-              stack: doctorInfo, // Apilar todos los elementos del doctor
+              width: 'auto',
+              alignment: 'center',
+              stack: doctorInfo,
             },
           ],
-          columnGap: 10, // Espacio entre las columnas
-          margin: [0, 10], // Margen externo del bloque
+          columnGap: 10,
+          margin: [0, 10],
         });
       }
 
@@ -255,31 +262,37 @@ export const MedicalExaminationListPage: FC = () => {
             bold: true,
             alignment: 'center',
             color: '#000000',
-            margin: [0, 0, 0, 20],
+            margin: [0, 1.5],
           },
           subheader: {
             fontSize: 16,
             bold: true,
             color: '#333333',
-            margin: [0, 10, 0, 10],
+            margin: [0, 1.5],
           },
           sectionTitle: {
             fontSize: 14,
             bold: true,
             color: '#000000',
-            margin: [0, 10, 0, 5],
+            margin: [0, 1.5],
             decoration: 'underline',
           },
           sectionContent: {
             fontSize: 12,
             color: '#000000',
-            margin: [0, 5, 0, 5],
+            margin: [0, 1.5],
           },
           doctorRightAligned: {
             fontSize: 12,
             color: '#000000',
-            alignment: 'right', // Alinear a la derecha
-            margin: [0, 2, 0, 2], // Reducir la separación vertical
+            alignment: 'right',
+            margin: [0, 1.5],
+          },
+          doctorContent: {
+            fontSize: 14,
+            bold: true,
+            color: '#000000',
+            margin: [0, 1.5],
           },
         },
       };
@@ -301,10 +314,8 @@ export const MedicalExaminationListPage: FC = () => {
         container.style.zIndex = '1000';
         container.appendChild(iframe);
 
-        // Añadir el contenedor al cuerpo del documento
         document.body.appendChild(container);
 
-        // Cerrar el modal al hacer clic fuera del iframe
         container.addEventListener('click', () => {
           document.body.removeChild(container);
         });
