@@ -1,17 +1,22 @@
 import { type FC, useCallback, useMemo, useState } from 'react';
 import { useNotification } from '@core/contexts';
 import { useFilters2 } from '@core/hooks';
-import { RiAddLine, RiDeleteBinLine, RiHome4Line, RiFileTextLine } from '@remixicon/react';
+import { RiAddLine, RiDeleteBinLine, RiFileTextLine, RiHome4Line } from '@remixicon/react';
 import { BreadCrumb, Container, DocumentMetadata } from '../../../_global';
 import { deleteMedicalExamination } from './controller.ts';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { type MedicalExaminationEntity, type MedicalExaminationGetAllResponseEntity } from '../../domain';
 import { type loaderMedicalExaminationList, type medicalExaminationDynamicFilters } from '../dataFetching';
 import { Select, Table, type TableProps } from 'antd';
-import { medicalExaminationTypesTranslation } from '@core/helpers';
+import { medicalExaminationTypesTranslation, textCapitalize } from '@core/helpers';
 import { MedicalExaminationType } from '../../../medicalExaminationType';
+import DOMPurify from 'dompurify';
+import htmlToPdfmake from 'html-to-pdfmake';
 import pdfMake from 'pdfmake/build/pdfmake';
-import 'pdfmake/build/vfs_fonts';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import dayjs from 'dayjs';
+
+pdfMake.vfs = (pdfFonts as any).pdfMake?.vfs || (pdfFonts as any);
 
 export const MedicalExaminationListPage: FC = () => {
   const { medicalExaminations, filters } = useLoaderData<typeof loaderMedicalExaminationList>();
@@ -58,54 +63,252 @@ export const MedicalExaminationListPage: FC = () => {
 
   const generatePDF = (item: MedicalExaminationGetAllResponseEntity) => {
     try {
-      // Convertir el campo `content` de JSON a objeto
       const content = item.content ? JSON.parse(item.content) : {};
 
-      // Construir el contenido del PDF dinámicamente
       const documentContent = [
         {
           text: `${medicalExaminationTypesTranslation[item.medicalExaminationType.type]} ${item.medicalExaminationType.name}`,
           style: 'header',
         },
-        { text: `Paciente: ${item.medicalPatient.name} ${item.medicalPatient.lastName}`, margin: [0, 10] },
-        { text: `Tipo de Examen: ${medicalExaminationTypesTranslation[item.medicalExaminationType.type]}` },
-        { text: `Nombre del Examen: ${item.medicalExaminationType.name}` },
-        { text: `Fecha del Examen: ${item.dateExam}`, margin: [0, 10] },
+        {
+          text: `Nombre: ${item.medicalPatient.name} ${item.medicalPatient.lastName}`,
+          style: 'sectionContent',
+          margin: [],
+        },
+        {
+          text: `Fecha del Examen: ${dayjs(item.dateExam).format('DD/MM/YYYY')}`,
+          style: 'sectionContent',
+          margin: [0, 10],
+        },
       ];
 
-      // Agregar campos del `content` solo si tienen valor
       if (content.observation) {
-        documentContent.push({ text: `Observación: ${content.observation}`, margin: [0, 5] });
-      }
-      if (content.dimension) {
-        documentContent.push({ text: `Dimensión: ${content.dimension}`, margin: [0, 5] });
-      }
-      if (content.measures) {
-        documentContent.push({ text: `Medidas: ${content.measures}`, margin: [0, 5] });
-      }
-      if (content.diagnosticDimension) {
-        documentContent.push({ text: `Diagnóstico de Dimensión: ${content.diagnosticDimension}`, margin: [0, 5] });
-      }
-      if (content.anexes) {
-        documentContent.push({ text: `Anexos: ${content.anexes}`, margin: [0, 5] });
-      }
-      if (content.diagnosticAnexes) {
-        documentContent.push({ text: `Diagnóstico de Anexos: ${content.diagnosticAnexes}`, margin: [0, 5] });
-      }
-      if (content.conclusion) {
-        documentContent.push({ text: `Conclusión: ${content.conclusion}`, margin: [0, 5] });
+        const sanitizedHTML = DOMPurify.sanitize(content.observation);
+        documentContent.push({
+          text: 'Observación:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
       }
 
-      // Definición del documento PDF
-      const documentDefinition: any = {
+      if (content.dimension) {
+        const sanitizedHTML = DOMPurify.sanitize(content.dimension);
+        documentContent.push({
+          text: 'Dimensión:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
+      }
+
+      if (content.measures) {
+        const sanitizedHTML = DOMPurify.sanitize(content.measures);
+        documentContent.push({
+          text: 'Medidas:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
+      }
+
+      if (content.diagnosticDimension) {
+        const sanitizedHTML = DOMPurify.sanitize(content.diagnosticDimension);
+        documentContent.push({
+          text: 'Diagnóstico de Dimensión:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
+      }
+
+      if (content.anexes) {
+        const sanitizedHTML = DOMPurify.sanitize(content.anexes);
+        documentContent.push({
+          text: 'Anexos:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
+      }
+
+      if (content.diagnosticAnexes) {
+        const sanitizedHTML = DOMPurify.sanitize(content.diagnosticAnexes);
+        documentContent.push({
+          text: 'Diagnóstico de Anexos:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
+      }
+
+      if (content.conclusion) {
+        const sanitizedHTML = DOMPurify.sanitize(textCapitalize(content.conclusion));
+        documentContent.push({
+          text: 'Conclusión:',
+          style: 'sectionTitle',
+          margin: [0, 10],
+        });
+        documentContent.push({
+          stack: htmlToPdfmake(sanitizedHTML),
+          style: 'sectionContent',
+          margin: [0, 5],
+        });
+      }
+
+      if (item.doctor) {
+        const doctorInfo = [];
+
+        // Agregar nombre del doctor si existe
+        if (item.doctor.name && item.doctor.lastName) {
+          doctorInfo.push({
+            text: `Dr. ${item.doctor.name} ${item.doctor.lastName}`,
+            style: 'doctorContent',
+            margin: [0, 2],
+          });
+        }
+
+        // Determinar qué índices usar según el tipo de examen
+        let professionIndices: number[] = [];
+        let specializationIndex = -1;
+
+        if (item.medicalExaminationType.type === MedicalExaminationType.Ultrasound) {
+          professionIndices = [1, 2]; // Mostrar profesiones en las posiciones [1, 2]
+          specializationIndex = 0; // Mostrar especialización en la posición [0]
+        } else if (item.medicalExaminationType.type === MedicalExaminationType.Ray) {
+          professionIndices = [0]; // Mostrar profesión en la posición [0]
+          specializationIndex = -1; // No mostrar especialización
+        }
+
+        // Agregar profesiones en una disposición horizontal con guiones
+        if (item.doctor.nameProfession && professionIndices.length > 0) {
+          const professions = professionIndices
+            .filter((index) => index >= 0 && index < item.doctor.nameProfession.length)
+            .map((index) => item.doctor.nameProfession[index]) // Obtener las profesiones
+            .join(' -'); // Unir las profesiones con un guion
+
+          // Añadir las profesiones como un solo texto
+          doctorInfo.push({
+            text: professions,
+            style: 'doctorContent',
+            margin: [0, 5], // Margen externo
+          });
+        }
+
+        // Agregar especialización si el índice es válido
+        if (
+          item.doctor.specialization &&
+          specializationIndex >= 0 &&
+          specializationIndex < item.doctor.specialization.length
+        ) {
+          doctorInfo.push({
+            text: `${item.doctor.specialization[specializationIndex]}`,
+            style: 'doctorContent',
+            margin: [0, 2],
+          });
+        }
+
+        // Agregar el bloque del doctor al contenido del PDF
+        documentContent.push({
+          columns: [
+            {}, // Columna vacía para empujar el contenido a la derecha
+            {
+              width: 'auto', // Ancho automático para ajustarse al contenido
+              alignment: 'center', // Centrar el contenido dentro del bloque
+              stack: doctorInfo, // Apilar todos los elementos del doctor
+            },
+          ],
+          columnGap: 10, // Espacio entre las columnas
+          margin: [0, 10], // Margen externo del bloque
+        });
+      }
+
+      const documentDefinition = {
         content: documentContent,
         styles: {
-          header: { fontSize: 18, bold: true, alignment: 'center' },
+          header: {
+            fontSize: 22,
+            bold: true,
+            alignment: 'center',
+            color: '#000000',
+            margin: [0, 0, 0, 20],
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            color: '#333333',
+            margin: [0, 10, 0, 10],
+          },
+          sectionTitle: {
+            fontSize: 14,
+            bold: true,
+            color: '#000000',
+            margin: [0, 10, 0, 5],
+            decoration: 'underline',
+          },
+          sectionContent: {
+            fontSize: 12,
+            color: '#000000',
+            margin: [0, 5, 0, 5],
+          },
+          doctorRightAligned: {
+            fontSize: 12,
+            color: '#000000',
+            alignment: 'right', // Alinear a la derecha
+            margin: [0, 2, 0, 2], // Reducir la separación vertical
+          },
         },
       };
 
-      // Generar el PDF
-      pdfMake.createPdf(documentDefinition).open();
+      pdfMake.createPdf(documentDefinition).getDataUrl(dataUrl => {
+        const iframe = document.createElement('iframe');
+        iframe.src = dataUrl;
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.style.border = 'none';
+
+        const container = document.createElement('div');
+        container.style.position = 'fixed';
+        container.style.top = '0';
+        container.style.left = '0';
+        container.style.width = '100%';
+        container.style.height = '100%';
+        container.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        container.style.zIndex = '1000';
+        container.appendChild(iframe);
+
+        // Añadir el contenedor al cuerpo del documento
+        document.body.appendChild(container);
+
+        // Cerrar el modal al hacer clic fuera del iframe
+        container.addEventListener('click', () => {
+          document.body.removeChild(container);
+        });
+      });
     } catch (error) {
       console.error('Error al parsear el contenido:', error);
       setNotification({
