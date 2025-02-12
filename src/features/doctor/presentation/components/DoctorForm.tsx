@@ -62,9 +62,7 @@ export const DoctorForm: FC<IDoctorFormProps> = ({ onSubmitData, doctor, loading
 
         <Column colSpan="col-span-6">
           <Form.Item
-            required
             label="Segundo nombre"
-            rules={[{ required: true, message: 'Debe ingresar el nombre' }]}
             initialValue={doctor?.middleName}
             name={FormFields.middleName}
           >
@@ -87,9 +85,7 @@ export const DoctorForm: FC<IDoctorFormProps> = ({ onSubmitData, doctor, loading
         </Column>
         <Column colSpan="col-span-6">
           <Form.Item
-            required
             label="Segundo apellido"
-            rules={[{ required: true, message: 'Debe ingresar el apellido' }]}
             initialValue={doctor?.secondaryLastName}
             name={FormFields.secondaryLastName}
           >

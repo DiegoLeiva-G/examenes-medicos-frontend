@@ -63,6 +63,18 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
 
         <Column colSpan="col-span-4">
           <Form.Item
+            required
+            label="Edad"
+            rules={[{ required: true, message: 'Debe ingresar la edad' }]}
+            initialValue={medicalPatient?.years}
+            name={FormFields.years}
+          >
+            <Input placeholder="Ingrese la edad..." disabled={loading} />
+          </Form.Item>
+        </Column>
+
+        <Column colSpan="col-span-4">
+          <Form.Item
             label="F.U.R."
             name={FormFields.fur}
             initialValue={medicalPatient?.fur ? dayjs(medicalPatient.fur) : undefined}
@@ -73,18 +85,6 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
               placeholder="Seleccione la F.U.R."
               disabled={loading}
             />
-          </Form.Item>
-        </Column>
-
-        <Column colSpan="col-span-4">
-          <Form.Item
-            required
-            label="Edad"
-            rules={[{ required: true, message: 'Debe ingresar la edad' }]}
-            initialValue={medicalPatient?.years}
-            name={FormFields.years}
-          >
-            <Input placeholder="Ingrese la edad..." disabled={loading} />
           </Form.Item>
         </Column>
       </Row>
@@ -104,9 +104,7 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
 
         <Column colSpan="col-span-6">
           <Form.Item
-            required
             label="Segundo nombre"
-            rules={[{ required: true, message: 'Debe ingresar el nombre' }]}
             initialValue={medicalPatient?.middleName}
             name={FormFields.middleName}
           >
@@ -129,9 +127,7 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
         </Column>
         <Column colSpan="col-span-6">
           <Form.Item
-            required
             label="Segundo apellido"
-            rules={[{ required: true, message: 'Debe ingresar el apellido' }]}
             initialValue={medicalPatient?.secondaryLastName}
             name={FormFields.secondaryLastName}
           >

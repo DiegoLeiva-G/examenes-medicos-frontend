@@ -24,6 +24,8 @@ export const MedicalExaminationListPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { onChangePageLimit, onChangePage } = useFilters2<medicalExaminationDynamicFilters>(filters);
   const navigate = useNavigate();
+  console.log({ medicalExaminations })
+
 
   const handleOnDeleteMedicalExamination = useCallback(
     (id: MedicalExaminationEntity['id']) => {
@@ -61,10 +63,24 @@ export const MedicalExaminationListPage: FC = () => {
     [medicalExaminations, navigate, onChangePage, setNotification],
   );
 
+  const cleanHTML = (html: string): string => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+
+    const emptyParagraphs = tempDiv.querySelectorAll('p');
+    emptyParagraphs.forEach((p) => {
+      if (!p.textContent?.trim()) {
+        p.remove();
+      }
+    });
+
+    tempDiv.innerHTML = tempDiv.innerHTML.replace(/(\n\s*){2,}/g, '\n');
+
+    return tempDiv.innerHTML;
+  };
+
   const generatePDF = (item: MedicalExaminationGetAllResponseEntity) => {
     try {
-      const content = item.content ? JSON.parse(item.content) : {};
-
       const documentContent = [
         {
           columns: [
@@ -124,70 +140,95 @@ export const MedicalExaminationListPage: FC = () => {
         margin: [0, 5],
       });
 
-      if (content.observation) {
-        const sanitizedHTML = DOMPurify.sanitize(content.observation);
+      if (item.observation) {
+        const sanitizedHTML = DOMPurify.sanitize(item.observation);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
         });
       }
 
-      if (content.dimension) {
-        const sanitizedHTML = DOMPurify.sanitize(content.dimension);
+      if (item.observation2) {
+        const sanitizedHTML = DOMPurify.sanitize(item.observation2);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
         });
       }
 
-      if (content.measures) {
-        const sanitizedHTML = DOMPurify.sanitize(content.measures);
+      if (item.dimension) {
+        const sanitizedHTML = DOMPurify.sanitize(item.dimension);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
         });
       }
 
-      if (content.diagnosticDimension) {
-        const sanitizedHTML = DOMPurify.sanitize(content.diagnosticDimension);
+      if (item.dimension2) {
+        const sanitizedHTML = DOMPurify.sanitize(item.dimension2);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
         });
       }
 
-      if (content.anexes) {
-        const sanitizedHTML = DOMPurify.sanitize(content.anexes);
+      if (item.descriptionDimension) {
+        const sanitizedHTML = DOMPurify.sanitize(item.descriptionDimension);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
+        documentContent.push({
+          stack: htmlToPdfmake(cleanedHTML),
+          style: 'sectionContent',
+        });
+      }
+
+      if (item.anexes) {
+        const sanitizedHTML = DOMPurify.sanitize(textCapitalize(item.anexes));
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
           text: 'Anexos:',
           style: 'sectionTitle',
           margin: [0, 10],
         });
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
           margin: [0, 1.5],
         });
       }
 
-      if (content.diagnosticAnexes) {
-        const sanitizedHTML = DOMPurify.sanitize(content.diagnosticAnexes);
+      if (item.anexes2) {
+        const sanitizedHTML = DOMPurify.sanitize(item.anexes2);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
+          style: 'sectionContent',
+        });
+      }
+
+      if (item.descriptionAnexes) {
+        const sanitizedHTML = DOMPurify.sanitize(item.descriptionAnexes);
+        const cleanedHTML = cleanHTML(sanitizedHTML);
+        documentContent.push({
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
           margin: [0, 1.5],
         });
       }
 
-      if (content.conclusion) {
-        const sanitizedHTML = DOMPurify.sanitize(textCapitalize(content.conclusion));
+      if (item.conclusion) {
+        const sanitizedHTML = DOMPurify.sanitize(textCapitalize(item.conclusion));
+        const cleanedHTML = cleanHTML(sanitizedHTML);
         documentContent.push({
           text: 'Conclusión:',
           style: 'sectionTitle',
           margin: [0, 10],
         });
         documentContent.push({
-          stack: htmlToPdfmake(sanitizedHTML),
+          stack: htmlToPdfmake(cleanedHTML),
           style: 'sectionContent',
           margin: [0, 1.5],
         });
@@ -357,7 +398,7 @@ export const MedicalExaminationListPage: FC = () => {
       {
         title: 'Fecha del examen',
         key: 'dateExam',
-        render: (_, item) => `${item.dateExam}`,
+        render: (_, item) => `${dayjs(item.dateExam).format('DD/MM/YYYY')}`,
       },
       {
         title: 'Acciones',
@@ -414,7 +455,7 @@ export const MedicalExaminationListPage: FC = () => {
           <div className="flex justify-between w-full">
             <div className="flex gap-4">
               <div className="w-44 font-semibold dark:text-gray-50">
-                Mes:
+                Tipo de examen:
                 <Select placeholder="Seleccione el tipo de examen médico..." className="block w-full rounded-md">
                   <Select.Option value="mostrar-todo">Mostrar todo</Select.Option>
                   <Select.Option value={MedicalExaminationType.Ultrasound}>Ecografía</Select.Option>
