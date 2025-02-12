@@ -11,11 +11,13 @@ enum FormFields {
   name = 'name',
   type = 'type',
   observation = 'observation',
+  observation2 = 'observation2',
   dimension = 'dimension',
-  measures = 'measures',
-  diagnosticDimension = 'diagnosticDimension',
+  dimension2 = 'dimension2',
+  descriptionDimension = 'descriptionDimension',
   anexes = 'anexes',
-  diagnosticAnexes = 'diagnosticAnexes',
+  anexes2 = 'anexes2',
+  descriptionAnexes = 'descriptionAnexes',
   conclusion = 'conclusion',
 }
 
@@ -23,11 +25,13 @@ export interface IMedicalExaminationTypeFormValues {
   [FormFields.name]: string;
   [FormFields.type]: string;
   [FormFields.observation]: string;
+  [FormFields.observation2]: string;
   [FormFields.dimension]: string;
-  [FormFields.measures]: string;
-  [FormFields.diagnosticDimension]: string;
+  [FormFields.dimension2]: string;
+  [FormFields.descriptionDimension]: string;
   [FormFields.anexes]: string;
-  [FormFields.diagnosticAnexes]: string;
+  [FormFields.anexes2]: string;
+  [FormFields.descriptionAnexes]: string;
   [FormFields.conclusion]: string;
 }
 
@@ -44,11 +48,13 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
 }) => {
   const [form] = Form.useForm();
   const observationEditorRef = useRef(null);
+  const observation2EditorRef = useRef(null);
   const dimensionEditorRef = useRef(null);
-  const measuresEditorRef = useRef(null);
-  const diagnosticDimensionEditorRef = useRef(null);
+  const dimension2EditorRef = useRef(null);
+  const descriptionDimensionEditorRef = useRef(null);
   const anexesEditorRef = useRef(null);
-  const diagnosticAnexesEditorRef = useRef(null);
+  const anexes2EditorRef = useRef(null);
+  const descriptionAnexesEditorRef = useRef(null);
   const conclusionEditorRef = useRef(null);
 
   const medicalExaminationTypeOptions = useMemo(
@@ -68,12 +74,32 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           .then((values: IMedicalExaminationTypeFormValues) => {
             onSubmitData({
               ...values,
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
               observation: observationEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              observation2: observation2EditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
               dimension: dimensionEditorRef.current?.getContent() || '',
-              measures: measuresEditorRef.current?.getContent() || '',
-              diagnosticDimension: diagnosticDimensionEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              dimension2: dimension2EditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              descriptionDimension: descriptionDimensionEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
               anexes: anexesEditorRef.current?.getContent() || '',
-              diagnosticAnexes: diagnosticAnexesEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              anexes2: anexes2EditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              descriptionAnexes: descriptionAnexesEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
               conclusion: conclusionEditorRef.current?.getContent() || '',
             });
           })
@@ -112,11 +138,10 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
         </Column>
       </Row>
 
+      {/* Observaciones  */}
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item
-            label="Observaciones"
-          >
+          <Form.Item label="Observaciones">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
               onInit={(_evt, observationEditor) => {
@@ -165,9 +190,58 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item
-            label="Dimensiones"
-          >
+          <Form.Item label="Segunda Observación">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, observation2Editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                observation2EditorRef.current = observation2Editor;
+              }}
+              initialValue={medicalExaminationType?.observation2 || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      {/* Dimensiones */}
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Dimensiones">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
               onInit={(_evt, dimensionEditor) => {
@@ -216,15 +290,15 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item label="Medidas">
+          <Form.Item label="Segunda dimensión">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, measuresEditor) => {
+              onInit={(_evt, dimension2Editor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                measuresEditorRef.current = measuresEditor;
+                dimension2EditorRef.current = dimension2Editor;
               }}
-              initialValue={medicalExaminationType?.measures || ''}
+              initialValue={medicalExaminationType?.dimension2 || ''}
               init={{
                 menubar: false,
                 plugins: [
@@ -265,15 +339,15 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item label="Diagnóstico de dimensiones">
+          <Form.Item label="Descripción de dimensión">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, diagnosticDimensionEditor) => {
+              onInit={(_evt, descriptionDimensionEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                diagnosticDimensionEditorRef.current = diagnosticDimensionEditor;
+                descriptionDimensionEditorRef.current = descriptionDimensionEditor;
               }}
-              initialValue={medicalExaminationType?.diagnosticDimension || ''}
+              initialValue={medicalExaminationType?.descriptionDimension || ''}
               init={{
                 menubar: false,
                 plugins: [
@@ -311,6 +385,8 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
           </Form.Item>
         </Column>
       </Row>
+
+      {/* Anexos */}
 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
@@ -363,15 +439,64 @@ export const MedicalExaminationTypeForm: FC<IMedicalExaminationTypeFormProps> = 
 
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item label="Diagnóstico de anexos">
+          <Form.Item label="Segundo anexo">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, diagnosticAnexesEditor) => {
+              onInit={(_evt, anexes2Editor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                diagnosticAnexesEditorRef.current = diagnosticAnexesEditor;
+                anexes2EditorRef.current = anexes2Editor;
               }}
-              initialValue={medicalExaminationType?.diagnosticAnexes || ''}
+              initialValue={medicalExaminationType?.anexes2 || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Descripción de anexos">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, descriptionAnexesEditor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                descriptionAnexesEditorRef.current = descriptionAnexesEditor;
+              }}
+              initialValue={medicalExaminationType?.descriptionAnexes || ''}
               init={{
                 menubar: false,
                 plugins: [

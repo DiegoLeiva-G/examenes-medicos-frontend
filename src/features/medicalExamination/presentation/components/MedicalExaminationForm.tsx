@@ -13,7 +13,15 @@ import { Editor } from '@tinymce/tinymce-react';
 
 enum FormFields {
   dateExam = 'dateExam',
-  content = 'content',
+  observation = 'observation',
+  observation2 = 'observation2',
+  dimension = 'dimension',
+  dimension2 = 'dimension2',
+  descriptionDimension = 'descriptionDimension',
+  anexes = 'anexes',
+  anexes2 = 'anexes2',
+  descriptionAnexes = 'descriptionAnexes',
+  conclusion = 'conclusion',
   medicalPatientId = 'medicalPatientId',
   medicalExaminationTypeId = 'medicalExaminationTypeId',
   doctorId = 'doctorId',
@@ -21,7 +29,15 @@ enum FormFields {
 
 export interface IMedicalExaminationFormValues {
   [FormFields.dateExam]: Date;
-  [FormFields.content]: string;
+  [FormFields.observation]: string;
+  [FormFields.observation2]: string;
+  [FormFields.dimension]: string;
+  [FormFields.dimension2]: string;
+  [FormFields.descriptionDimension]: string;
+  [FormFields.anexes]: string;
+  [FormFields.anexes2]: string;
+  [FormFields.descriptionAnexes]: string;
+  [FormFields.conclusion]: string;
   [FormFields.medicalPatientId]: string;
   [FormFields.medicalExaminationTypeId]: string;
   [FormFields.doctorId]: string;
@@ -45,8 +61,19 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
   doctors,
 }) => {
   const [form] = Form.useForm();
-  const editorRef = useRef(null);
   const [selectedType, setSelectedType] = useState<MedicalExaminationTypeEntity | null>(null);
+
+  console.log(selectedType)
+
+  const observationEditorRef = useRef(null);
+  const observation2EditorRef = useRef(null);
+  const dimensionEditorRef = useRef(null);
+  const dimension2EditorRef = useRef(null);
+  const descriptionDimensionEditorRef = useRef(null);
+  const anexesEditorRef = useRef(null);
+  const anexes2EditorRef = useRef(null);
+  const descriptionAnexesEditorRef = useRef(null);
+  const conclusionEditorRef = useRef(null);
 
   const medicalPatientOptions = useMemo(
     () =>
@@ -79,33 +106,101 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
     const selected = medicalExaminationTypes.find((type) => type.id === value);
     if (selected) {
       setSelectedType(selected);
-      const content = `
-        <h3>Observación:</h3>
-        <p>${selected.observation || ''}</p>
-        <h3>Dimensión:</h3>
-        <p>${selected.dimension || ''}</p>
-        <h3>Medidas:</h3>
-        <p>${selected.measures || ''}</p>
-        <h3>Diagnóstico de Dimensión:</h3>
-        <p>${selected.diagnosticDimension || ''}</p>
-        <h3>Anexos:</h3>
-        <p>${selected.anexes || ''}</p>
-        <h3>Diagnóstico de Anexos:</h3>
-        <p>${selected.diagnosticAnexes || ''}</p>
-        <h3>Conclusión:</h3>
-        <p>${selected.conclusion || ''}</p>
-      `;
-      if (editorRef.current) {
+
+      // Actualizar los valores en los editores TinyMCE
+      if (observationEditorRef.current) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        editorRef.current.setContent(content); // Actualizar el contenido del editor
+        observationEditorRef.current.setContent(selected.observation || '');
+      }
+      if (observation2EditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        observation2EditorRef.current.setContent(selected.observation2 || '');
+      }
+      if (dimensionEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        dimensionEditorRef.current.setContent(selected.dimension || '');
+      }
+      if (dimension2EditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        dimension2EditorRef.current.setContent(selected.dimension2 || '');
+      }
+      if (descriptionDimensionEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        descriptionDimensionEditorRef.current.setContent(selected.descriptionDimension || '');
+      }
+      if (anexesEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        anexesEditorRef.current.setContent(selected.anexes || '');
+      }
+      if (anexes2EditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        anexes2EditorRef.current.setContent(selected.anexes2 || '');
+      }
+      if (descriptionAnexesEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        descriptionAnexesEditorRef.current.setContent(selected.descriptionAnexes || '');
+      }
+      if (conclusionEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        conclusionEditorRef.current.setContent(selected.conclusion || '');
       }
     } else {
-      setSelectedType(null); // Limpiar el estado si no hay selección
-      if (editorRef.current) {
+      setSelectedType(null);
+
+      // Limpiar los valores en los editores TinyMCE
+      if (observationEditorRef.current) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        editorRef.current.setContent(''); // Limpiar el contenido del editor
+        observationEditorRef.current.setContent('');
+      }
+      if (observation2EditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        observation2EditorRef.current.setContent('');
+      }
+      if (dimensionEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        dimensionEditorRef.current.setContent('');
+      }
+      if (dimension2EditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        dimension2EditorRef.current.setContent('');
+      }
+      if (descriptionDimensionEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        descriptionDimensionEditorRef.current.setContent('');
+      }
+      if (anexesEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        anexesEditorRef.current.setContent('');
+      }
+      if (anexes2EditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        anexes2EditorRef.current.setContent('');
+      }
+      if (descriptionAnexesEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        descriptionAnexesEditorRef.current.setContent('');
+      }
+      if (conclusionEditorRef.current) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        conclusionEditorRef.current.setContent('');
       }
     }
   };
@@ -115,14 +210,41 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
       form={form}
       layout="vertical"
       method="post"
-      onSubmitCapture={(event) => {
+      onSubmitCapture={event => {
         event.preventDefault();
         form
           .validateFields()
           .then((values: IMedicalExaminationFormValues) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            onSubmitData({ ...values, content: editorRef.current?.getContent() || '' });
+            onSubmitData({
+              ...values,
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              observation: observationEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              observation2: observation2EditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              dimension: dimensionEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              dimension2: dimension2EditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              descriptionDimension: descriptionDimensionEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              anexes: anexesEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              anexes2: anexes2EditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              descriptionAnexes: descriptionAnexesEditorRef.current?.getContent() || '',
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              conclusion: conclusionEditorRef.current?.getContent() || '',
+            });
           })
           .catch(() => {});
       }}
@@ -197,17 +319,414 @@ export const MedicalExaminationForm: FC<IMedicalExaminationFormProps> = ({
         </Column>
       </Row>
 
+      {/* Observaciones  */}
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-full">
-          <Form.Item label="Contenido">
+          <Form.Item label="Observaciones">
             <Editor
               apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
-              onInit={(_evt, editor) => {
+              onInit={(_evt, observationEditor) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                editorRef.current = editor;
+                observationEditorRef.current = observationEditor;
               }}
-              initialValue={medicalExamination?.content || ''}
+              initialValue={medicalExamination?.observation || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Segunda Observación">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, observation2Editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                observation2EditorRef.current = observation2Editor;
+              }}
+              initialValue={medicalExamination?.observation2 || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      {/* Dimensiones */}
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Dimensiones">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, dimensionEditor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                dimensionEditorRef.current = dimensionEditor;
+              }}
+              initialValue={medicalExamination?.dimension || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Segunda dimensión">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, dimension2Editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                dimension2EditorRef.current = dimension2Editor;
+              }}
+              initialValue={medicalExamination?.dimension2 || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Descripción de dimensión">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, descriptionDimensionEditor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                descriptionDimensionEditorRef.current = descriptionDimensionEditor;
+              }}
+              initialValue={medicalExamination?.descriptionDimension || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      {/* Anexos */}
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Anexos">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, anexesEditor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                anexesEditorRef.current = anexesEditor;
+              }}
+              initialValue={medicalExamination?.anexes || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Segundo anexo">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, anexes2Editor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                anexes2EditorRef.current = anexes2Editor;
+              }}
+              initialValue={medicalExamination?.anexes2 || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Descripción de anexos">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, descriptionAnexesEditor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                descriptionAnexesEditorRef.current = descriptionAnexesEditor;
+              }}
+              initialValue={medicalExamination?.descriptionAnexes || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                  'help',
+                  'wordcount',
+                  'autoresize',
+                ],
+                toolbar:
+                  'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
+                resize: true,
+                // eslint-disable-next-line camelcase
+                autoresize_min_height: 200,
+                // eslint-disable-next-line camelcase
+                autoresize_max_height: 600,
+                // eslint-disable-next-line camelcase
+                autoresize_bottom_margin: 10,
+              }}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-full">
+          <Form.Item label="Conclusión">
+            <Editor
+              apiKey="x1e5v2aptwgl75irb3dsoiew6z3u09nt8m4chzduo7lclqf4"
+              onInit={(_evt, conclusionEditor) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                conclusionEditorRef.current = conclusionEditor;
+              }}
+              initialValue={medicalExamination?.conclusion || ''}
               init={{
                 menubar: false,
                 plugins: [

@@ -3,7 +3,8 @@ import { type FC } from 'react';
 import { Column, Row } from '../../../_global';
 import { Link } from 'react-router-dom';
 import { RiSaveLine } from '@remixicon/react';
-import { Form, Input } from 'antd';
+import { DatePicker, Form, Input } from 'antd';
+import dayjs from 'dayjs';
 
 enum FormFields {
   rut = 'rut',
@@ -11,6 +12,8 @@ enum FormFields {
   lastName = 'lastName',
   middleName = 'middleName',
   secondaryLastName = 'secondaryLastName',
+  years = 'years',
+  fur = 'fur',
 }
 
 export interface IMedicalPatientFormValues {
@@ -19,6 +22,8 @@ export interface IMedicalPatientFormValues {
   [FormFields.lastName]: string;
   [FormFields.middleName]: string;
   [FormFields.secondaryLastName]: string;
+  [FormFields.years]: string;
+  [FormFields.fur]: Date;
 }
 
 interface IMedicalPatientFormProps {
@@ -46,18 +51,44 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
       }}
     >
       <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-6">
+        <Column colSpan="col-span-4">
           <Form.Item
-            required
             label="Rut"
-            rules={[{ required: true, message: 'Debe ingresar el rut' }]}
             initialValue={medicalPatient?.rut}
             name={FormFields.rut}
           >
             <Input placeholder="Ingrese el rut..." disabled={loading} />
           </Form.Item>
         </Column>
+
+        <Column colSpan="col-span-4">
+          <Form.Item
+            label="F.U.R."
+            name={FormFields.fur}
+            initialValue={medicalPatient?.fur ? dayjs(medicalPatient.fur) : undefined}
+          >
+            <DatePicker
+              className="w-full"
+              format="DD/MM/YYYY"
+              placeholder="Seleccione la F.U.R."
+              disabled={loading}
+            />
+          </Form.Item>
+        </Column>
+
+        <Column colSpan="col-span-4">
+          <Form.Item
+            required
+            label="Edad"
+            rules={[{ required: true, message: 'Debe ingresar la edad' }]}
+            initialValue={medicalPatient?.years}
+            name={FormFields.years}
+          >
+            <Input placeholder="Ingrese la edad..." disabled={loading} />
+          </Form.Item>
+        </Column>
       </Row>
+
       <Row spacingX="sm:gap-x-6">
         <Column colSpan="col-span-6">
           <Form.Item

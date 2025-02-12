@@ -8,6 +8,8 @@ export class MedicalPatientEntity {
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
+    public years?: string | null,
+    public fur?: string | null,
     public medicalExamination?: MedicalExaminationEntity[] | null,
     public deleted?: boolean | null,
     public createdAt?: Date | null,
@@ -23,6 +25,8 @@ export class MedicalPatientGetAllResponseEntity implements Omit<MedicalPatientEn
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
+    public years?: string | null,
+    public fur?: string | null,
     public medicalExamination?: MedicalExaminationEntity[] | null,
     public createdAt?: Date | null,
   ) {}
@@ -36,6 +40,8 @@ export class MedicalPatientGetByIdResponseEntity implements Pick<MedicalPatientE
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
+    public years?: string | null,
+    public fur?: string | null,
     public medicalExamination?: MedicalExaminationEntity[] | null,
     public createdAt?: Date | null,
   ) {}
@@ -51,11 +57,13 @@ export class MedicalPatientCreateResponseEntity
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
+    public years?: string | null,
+    public fur?: string | null,
   ) {}
 }
 
 export class MedicalPatientUpdateResponseEntity
-  implements Pick<MedicalPatientEntity, 'id' | 'rut' | 'name' | 'middleName' | 'lastName' | 'secondaryLastName'>
+  implements Pick<MedicalPatientEntity, 'id' | 'rut' | 'name' | 'middleName' | 'lastName' | 'secondaryLastName'| 'years' | 'fur'>
 {
   constructor(
     public id: string,
@@ -64,6 +72,8 @@ export class MedicalPatientUpdateResponseEntity
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
+    public years?: string | null,
+    public fur?: string | null,
   ) {}
 }
 
@@ -71,13 +81,15 @@ export class MedicalPatientDeleteResponseEntity implements Pick<MedicalPatientEn
   constructor(public id: string) {}
 }
 
-export class MedicalPatientFormEntity implements Pick<MedicalPatientEntity, 'rut' | 'name' | 'lastName'> {
+export class MedicalPatientFormEntity implements Pick<MedicalPatientEntity, 'name' | 'lastName'> {
   constructor(
-    public rut: string,
     public name: string,
     public lastName: string,
     public middleName?: string | null,
     public secondaryLastName?: string | null,
+    public rut?: string | null,
+    public years?: string | null,
+    public fur?: string | null,
     public id?: string | null,
   ) {}
 }

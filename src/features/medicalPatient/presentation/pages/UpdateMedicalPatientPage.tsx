@@ -17,32 +17,34 @@ export const UpdateMedicalPatientPage: FC = () => {
     (formValues: IMedicalPatientFormValues) => {
       setLoading(true);
 
-      updateMedicalPatient.execute({ id: medicalPatientId, ...formValues }).then(response => {
-        setLoading(false);
-        const titleNotification = 'Edición del paciente médico';
+      updateMedicalPatient
+        .execute({ id: medicalPatientId, ...formValues, fur: formValues.fur.toISOString() })
+        .then(response => {
+          setLoading(false);
+          const titleNotification = 'Edición del paciente médico';
 
-        if (response.error?.message) {
-          setNotification({
-            title: titleNotification,
-            type: 'error',
-            message: response.error.message,
-          });
+          if (response.error?.message) {
+            setNotification({
+              title: titleNotification,
+              type: 'error',
+              message: response.error.message,
+            });
 
-          return;
-        }
+            return;
+          }
 
-        if (response.data?.id) {
-          setNotification({
-            title: titleNotification,
-            type: 'success',
-            message: 'Se ha editado correctamente el paciente médico!',
-          });
+          if (response.data?.id) {
+            setNotification({
+              title: titleNotification,
+              type: 'success',
+              message: 'Se ha editado correctamente el paciente médico!',
+            });
 
-          navigate('/pacientes-medicos');
+            navigate('/pacientes-medicos');
 
-          return;
-        }
-      });
+            return;
+          }
+        });
     },
     [navigate, setNotification, medicalPatientId],
   );

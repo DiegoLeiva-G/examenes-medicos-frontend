@@ -16,7 +16,7 @@ export const CreateMedicalPatientPage: FC = () => {
       setLoading(true);
 
       createMedicalPatient
-        .execute(formValues)
+        .execute({  ...formValues, fur: formValues.fur.toISOString() })
         .then(response => {
           setLoading(false);
           const titleNotification = 'Creación de paciente médico';
@@ -44,7 +44,7 @@ export const CreateMedicalPatientPage: FC = () => {
         .catch(() => {
           setLoading(false);
           setNotification({
-            title: 'Creación de médico',
+            title: 'Creación de paciente médico',
             type: 'error',
             message: 'No se pudo crear el paciente médico.',
           });

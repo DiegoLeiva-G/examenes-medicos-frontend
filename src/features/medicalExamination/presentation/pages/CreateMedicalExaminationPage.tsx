@@ -18,7 +18,6 @@ export const CreateMedicalExaminationPage: FC = () => {
     (formValues: IMedicalExaminationFormValues) => {
       setLoading(true);
 
-      console.log({ formValues });
       createMedicalExamination
         .execute({  ...formValues, dateExam: formValues.dateExam.toISOString(), })
         .then(response => {

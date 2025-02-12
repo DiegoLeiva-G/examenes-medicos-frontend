@@ -6,7 +6,15 @@ export class MedicalExaminationEntity {
   constructor(
     public id: string,
     public dateExam: string,
-    public content?: string | null,
+    public observation?: string | null,
+    public observation2?: string | null,
+    public dimension?: string | null,
+    public dimension2?: string | null,
+    public descriptionDimension?: string | null,
+    public anexes?: string | null,
+    public anexes2?: string | null,
+    public descriptionAnexes?: string | null,
+    public conclusion?: string | null,
     public medicalPatientId?: string | null,
     public medicalExaminationTypeId?: string | null,
     public doctorId?: string | null,
@@ -42,7 +50,15 @@ export class MedicalExaminationGetAllResponseEntity implements Pick<MedicalExami
       name: MedicalExaminationTypeEntity['name'];
       type: MedicalExaminationType;
     },
-    public content?: string,
+    public observation?: string | null,
+    public observation2?: string | null,
+    public dimension?: string | null,
+    public dimension2?: string | null,
+    public descriptionDimension?: string | null,
+    public anexes?: string | null,
+    public anexes2?: string | null,
+    public descriptionAnexes?: string | null,
+    public conclusion?: string | null,
     public createdAt?: Date | null,
   ) {}
 }
@@ -73,7 +89,15 @@ export class MedicalExaminationGetByIdResponseEntity implements Pick<MedicalExam
       name: MedicalExaminationTypeEntity['name'];
       type: MedicalExaminationType;
     },
-    public content?: string,
+    public observation?: string | null,
+    public observation2?: string | null,
+    public dimension?: string | null,
+    public dimension2?: string | null,
+    public descriptionDimension?: string | null,
+    public anexes?: string | null,
+    public anexes2?: string | null,
+    public descriptionAnexes?: string | null,
+    public conclusion?: string | null,
     public createdAt?: Date | null,
   ) {}
 }
@@ -82,7 +106,15 @@ export class MedicalExaminationCreateResponseEntity implements Omit<MedicalExami
   constructor(
     public id: MedicalExaminationEntity['id'],
     public dateExam: MedicalExaminationEntity['dateExam'],
-    public content?: MedicalExaminationEntity['content'],
+    public observation?: MedicalExaminationEntity['observation'],
+    public observation2?: MedicalExaminationEntity['observation2'],
+    public dimension?: MedicalExaminationEntity['dimension'],
+    public dimension2?: MedicalExaminationEntity['dimension2'],
+    public descriptionDimension?: MedicalExaminationEntity['descriptionDimension'],
+    public anexes?: MedicalExaminationEntity['anexes'],
+    public anexes2?: MedicalExaminationEntity['anexes2'],
+    public descriptionAnexes?: MedicalExaminationEntity['descriptionAnexes'],
+    public conclusion?: MedicalExaminationEntity['conclusion'],
     public medicalPatientId?: MedicalExaminationEntity['medicalPatientId'],
     public medicalExaminationTypeId?: MedicalExaminationEntity['medicalExaminationTypeId'],
     public doctorId?: MedicalExaminationEntity['doctorId'],
@@ -96,7 +128,15 @@ export class MedicalExaminationUpdateResponseEntity
   constructor(
     public id: MedicalExaminationEntity['id'],
     public dateExam: MedicalExaminationEntity['dateExam'],
-    public content?: MedicalExaminationEntity['content'],
+    public observation?: MedicalExaminationEntity['observation'],
+    public observation2?: MedicalExaminationEntity['observation2'],
+    public dimension?: MedicalExaminationEntity['dimension'],
+    public dimension2?: MedicalExaminationEntity['dimension2'],
+    public descriptionDimension?: MedicalExaminationEntity['descriptionDimension'],
+    public anexes?: MedicalExaminationEntity['anexes'],
+    public anexes2?: MedicalExaminationEntity['anexes2'],
+    public descriptionAnexes?: MedicalExaminationEntity['descriptionAnexes'],
+    public conclusion?: MedicalExaminationEntity['conclusion'],
     public medicalPatientId?: MedicalExaminationEntity['medicalPatientId'],
     public medicalExaminationTypeId?: MedicalExaminationEntity['medicalExaminationTypeId'],
     public doctorId?: MedicalExaminationEntity['doctorId'],
@@ -112,7 +152,15 @@ export class MedicalExaminationFormEntity
     Pick<
       MedicalExaminationEntity,
       | 'dateExam'
-      | 'content'
+      | 'observation'
+      | 'observation2'
+      | 'dimension'
+      | 'dimension2'
+      | 'descriptionDimension'
+      | 'anexes'
+      | 'anexes2'
+      | 'descriptionAnexes'
+      | 'conclusion'
       | 'medicalPatientId'
       | 'medicalExaminationTypeId'
       | 'doctorId'
@@ -120,7 +168,15 @@ export class MedicalExaminationFormEntity
 {
   constructor(
     public dateExam: MedicalExaminationEntity['dateExam'],
-    public content?: MedicalExaminationEntity['content'],
+    public observation?: MedicalExaminationEntity['observation'],
+    public observation2?: MedicalExaminationEntity['observation2'],
+    public dimension?: MedicalExaminationEntity['dimension'],
+    public dimension2?: MedicalExaminationEntity['dimension2'],
+    public descriptionDimension?: MedicalExaminationEntity['descriptionDimension'],
+    public anexes?: MedicalExaminationEntity['anexes'],
+    public anexes2?: MedicalExaminationEntity['anexes2'],
+    public descriptionAnexes?: MedicalExaminationEntity['descriptionAnexes'],
+    public conclusion?: MedicalExaminationEntity['conclusion'],
     public medicalPatientId?: MedicalExaminationEntity['medicalPatientId'],
     public medicalExaminationTypeId?: MedicalExaminationEntity['medicalExaminationTypeId'],
     public doctorId?: MedicalExaminationEntity['doctorId'],
