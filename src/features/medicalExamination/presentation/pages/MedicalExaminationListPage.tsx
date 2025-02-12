@@ -7,7 +7,7 @@ import { deleteMedicalExamination } from './controller.ts';
 import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { type MedicalExaminationEntity, type MedicalExaminationGetAllResponseEntity } from '../../domain';
 import { type loaderMedicalExaminationList, type medicalExaminationDynamicFilters } from '../dataFetching';
-import { Select, Table, type TableProps } from 'antd';
+import { DatePicker, Input, Select, Table, type TableProps } from 'antd';
 import { apsaIcon, medicalExaminationTypesTranslation, textCapitalize } from '@core/helpers';
 import { MedicalExaminationType } from '../../../medicalExaminationType';
 import DOMPurify from 'dompurify';
@@ -15,7 +15,10 @@ import htmlToPdfmake from 'html-to-pdfmake';
 import pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import dayjs from 'dayjs';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import { debounce } from 'lodash';
 
+dayjs.extend(weekOfYear);
 pdfMake.vfs = (pdfFonts as any).pdfMake?.vfs || (pdfFonts as any);
 
 export const MedicalExaminationListPage: FC = () => {
@@ -23,9 +26,11 @@ export const MedicalExaminationListPage: FC = () => {
   const { setNotification } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
   const { onChangePageLimit, onChangePage } = useFilters2<medicalExaminationDynamicFilters>(filters);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedWeek, setSelectedWeek] = useState<dayjs.Dayjs | null>(null);
+  const [selectedDay, setSelectedDay] = useState<dayjs.Dayjs | null>(null);
   const navigate = useNavigate();
-  console.log({ medicalExaminations })
-
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleOnDeleteMedicalExamination = useCallback(
     (id: MedicalExaminationEntity['id']) => {
@@ -63,6 +68,10 @@ export const MedicalExaminationListPage: FC = () => {
     [medicalExaminations, navigate, onChangePage, setNotification],
   );
 
+  const handleSearch = debounce((value: string) => {
+    setSearchQuery(value);
+  }, 500);
+
   const cleanHTML = (html: string): string => {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
@@ -93,7 +102,7 @@ export const MedicalExaminationListPage: FC = () => {
                   margin: [0, 1.5],
                 },
                 {
-                  text: `Edad: ${item.medicalPatient.name} Años`,
+                  text: `Edad: ${item.medicalPatient.age} Años`,
                   style: 'sectionContent',
                   margin: [0, 1.5],
                 },
@@ -134,6 +143,7 @@ export const MedicalExaminationListPage: FC = () => {
         },
       ];
 
+      // Agregar contenido dinámico al PDF
       documentContent.push({
         text: `Hallazgos:`,
         style: 'sectionTitle',
@@ -236,7 +246,6 @@ export const MedicalExaminationListPage: FC = () => {
 
       if (item.doctor) {
         const doctorInfo = [];
-
         if (item.doctor.name && item.doctor.lastName) {
           doctorInfo.push({
             text: `Dr. ${item.doctor.name} ${item.doctor.lastName}`,
@@ -261,7 +270,6 @@ export const MedicalExaminationListPage: FC = () => {
             .filter((index) => index >= 0 && index < item.doctor.nameProfession.length)
             .map((index) => item.doctor.nameProfession[index])
             .join(' -');
-
           doctorInfo.push({
             text: professions,
             style: 'doctorContent',
@@ -338,31 +346,21 @@ export const MedicalExaminationListPage: FC = () => {
         },
       };
 
-      pdfMake.createPdf(documentDefinition).getDataUrl(dataUrl => {
-        const iframe = document.createElement('iframe');
-        iframe.src = dataUrl;
-        iframe.width = '100%';
-        iframe.height = '100%';
-        iframe.style.border = 'none';
-
-        const container = document.createElement('div');
-        container.style.position = 'fixed';
-        container.style.top = '0';
-        container.style.left = '0';
-        container.style.width = '100%';
-        container.style.height = '100%';
-        container.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        container.style.zIndex = '1000';
-        container.appendChild(iframe);
-
-        document.body.appendChild(container);
-
-        container.addEventListener('click', () => {
-          document.body.removeChild(container);
-        });
+      // Crear el PDF y abrirlo en una nueva pestaña
+      pdfMake.createPdf(documentDefinition).getBlob((blob) => {
+        const url = URL.createObjectURL(blob); // Crear una URL válida para el Blob
+        const newWindow = window.open(url, '_blank'); // Abrir la URL en una nueva pestaña
+        if (!newWindow) {
+          console.error('No se pudo abrir una nueva pestaña.');
+          setNotification({
+            type: 'error',
+            title: 'Error al abrir el PDF',
+            message: 'No se pudo abrir el PDF en una nueva pestaña. Verifica los ajustes de tu navegador.',
+          });
+        }
       });
     } catch (error) {
-      console.error('Error al parsear el contenido:', error);
+      console.error('Error al generar el PDF:', error);
       setNotification({
         type: 'error',
         title: 'Error al generar el PDF',
@@ -446,6 +444,44 @@ export const MedicalExaminationListPage: FC = () => {
     [],
   );
 
+  const filteredMedicalExaminations = useMemo(() => {
+    let filteredResults = medicalExaminations.results;
+
+    if (selectedType) {
+      filteredResults = filteredResults.filter(
+        (item) => item.medicalExaminationType.type === selectedType
+      );
+    }
+
+    if (selectedWeek) {
+      const startOfWeek = selectedWeek.startOf('week');
+      const endOfWeek = selectedWeek.endOf('week');
+
+      filteredResults = filteredResults.filter((item) => {
+        const examDate = dayjs(item.dateExam);
+        return examDate.isAfter(startOfWeek) && examDate.isBefore(endOfWeek);
+      });
+    }
+
+    if (selectedDay) {
+      const selectedDate = selectedDay.startOf('day');
+      filteredResults = filteredResults.filter((item) => {
+        const examDate = dayjs(item.dateExam).startOf('day');
+        return examDate.isSame(selectedDate);
+      });
+    }
+
+    if (searchQuery.trim()) {
+      filteredResults = filteredResults.filter((item) =>
+        `${item.medicalPatient.name} ${item.medicalPatient.lastName}`
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return filteredResults;
+  }, [medicalExaminations.results, selectedDay, selectedType, selectedWeek, searchQuery]);
+
   return (
     <>
       <DocumentMetadata title={`Exámenes médicos - Examenes médicos`} />
@@ -455,13 +491,45 @@ export const MedicalExaminationListPage: FC = () => {
           <div className="flex justify-between w-full">
             <div className="flex gap-4">
               <div className="w-44 font-semibold dark:text-gray-50">
+                Paciente
+                <Input
+                  type="text"
+                  placeholder="Buscar por nombre..."
+                  className="w-full px-2 py-1 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  onChange={e => handleSearch(e.target.value)}
+                />
+              </div>
+
+              <div className="ml-5 w-44 font-semibold dark:text-gray-50">
                 Tipo de examen:
-                <Select placeholder="Seleccione el tipo de examen médico..." className="block w-full rounded-md">
-                  <Select.Option value="mostrar-todo">Mostrar todo</Select.Option>
-                  <Select.Option value={MedicalExaminationType.Ultrasound}>Ecografía</Select.Option>
-                  <Select.Option value={MedicalExaminationType.Ray}>Rayos</Select.Option>
-                  <Select.Option value={MedicalExaminationType.Resonance}>Resonancia</Select.Option>
+                <Select
+                  placeholder="Selecciona un tipo de examen"
+                  style={{ width: 200 }}
+                  onChange={value => setSelectedType(value)}
+                  allowClear
+                  value={selectedType || undefined}
+                >
+                  <Select.Option value={null}>Mostrar todo</Select.Option>
+                  <Select.Option value="Ultrasound">Ecografía</Select.Option>
+                  <Select.Option value="Ray">Rayos</Select.Option>
+                  <Select.Option value="Resonance">Resonancia</Select.Option>
                 </Select>
+              </div>
+
+              <div className="ml-5 w-44 font-semibold dark:text-gray-50">
+                Día
+                <DatePicker placeholder="Selecciona un día" onChange={date => setSelectedDay(date)} allowClear />
+              </div>
+
+              <div className="w-44 font-semibold dark:text-gray-50">
+                Semana
+                <DatePicker
+                  picker="week"
+                  style={{ width: 200 }}
+                  placeholder="Selecciona una semana"
+                  onChange={date => setSelectedWeek(date)}
+                  allowClear
+                />
               </div>
             </div>
 
@@ -488,7 +556,7 @@ export const MedicalExaminationListPage: FC = () => {
                 <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg dark:ring-white dark:ring-opacity-10">
                   <Table
                     columns={columns}
-                    dataSource={medicalExaminations.results}
+                    dataSource={filteredMedicalExaminations}
                     loading={loading}
                     rowKey="id"
                     pagination={{
