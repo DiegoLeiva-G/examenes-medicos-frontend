@@ -500,7 +500,7 @@ export const MedicalExaminationListPage: FC = () => {
                 />
               </div>
 
-              <div className="ml-5 w-44 font-semibold dark:text-gray-50">
+              <div className="w-44 font-semibold dark:text-gray-50">
                 Tipo de examen:
                 <Select
                   placeholder="Selecciona un tipo de examen"
