@@ -1,1 +1,2 @@
-export * from './MedicalExaminationForm';
+export * from './MedicalExaminationCreateForm';
+export * from './MedicalExaminationUpdateForm'

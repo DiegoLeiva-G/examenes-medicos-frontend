@@ -67,14 +67,17 @@ export const MedicalPatientListPage: FC = () => {
             to={`/pacientes-medicos/${item.id}/editar`}
             className="font-semibold text-blue-800 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            {`${item.name} ${item.lastName} ${item.secondaryLastName}`}
+            {`${item.name} ${item.lastName} `}
           </Link>
         ),
       },
       {
         title: 'Rut',
         key: 'rut',
-        render: (_, item) => `${formatRut(item.rut) || '-'}`,
+        render: (_, item) => {
+          const rut = item.rut;
+          return `${rut ? formatRut(rut) : '-'}`;
+        },
       },
       {
         title: '',

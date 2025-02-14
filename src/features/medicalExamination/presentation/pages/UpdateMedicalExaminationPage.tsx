@@ -3,7 +3,10 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 import { useNotification } from '@core/contexts';
 import { RiHome4Line } from '@remixicon/react';
 import { BreadCrumb, Container, DocumentMetadata } from '../../../_global';
-import { type IMedicalExaminationFormValues, MedicalExaminationForm } from '../components';
+import {
+  type IMedicalExaminationUpdateFormValues,
+  MedicalExaminationUpdateForm,
+} from '../components';
 import { type loaderMedicalExaminationUpdate } from '../dataFetching';
 import { updateMedicalExamination } from './controller.ts';
 
@@ -15,7 +18,7 @@ export const UpdateMedicalExaminationPage: FC = () => {
   const navigate = useNavigate();
 
   const handleOnSubmit = useCallback(
-    (formValues: IMedicalExaminationFormValues) => {
+    (formValues: IMedicalExaminationUpdateFormValues) => {
       setLoading(true);
 
       updateMedicalExamination
@@ -78,7 +81,7 @@ export const UpdateMedicalExaminationPage: FC = () => {
       <DocumentMetadata title={`Editar examen médico - Examenes médicos`} />
       <BreadCrumb title={`Editar examen médico`} navItems={navItems} />
       <Container>
-        <MedicalExaminationForm
+        <MedicalExaminationUpdateForm
           loading={loading}
           medicalExamination={medicalExamination}
           onSubmitData={handleOnSubmit}

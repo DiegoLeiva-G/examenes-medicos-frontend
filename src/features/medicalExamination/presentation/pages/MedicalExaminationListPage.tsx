@@ -102,12 +102,17 @@ export const MedicalExaminationListPage: FC = () => {
                   margin: [0, 1.5],
                 },
                 {
-                  text: `Edad: ${item.medicalPatient.age} Años`,
+                  text: `Edad: ${item.medicalPatient} Años`,
                   style: 'sectionContent',
                   margin: [0, 1.5],
                 },
                 {
                   text: `Fecha del examen: ${dayjs(item.dateExam).format('DD/MM/YYYY')}`,
+                  style: 'sectionContent',
+                  margin: [0, 1.5],
+                },
+                {
+                  text: `F.U.R.: ${dayjs(item.medicalPatient.fur).format('DD/MM/YYYY')}`,
                   style: 'sectionContent',
                   margin: [0, 1.5],
                 },
@@ -143,7 +148,6 @@ export const MedicalExaminationListPage: FC = () => {
         },
       ];
 
-      // Agregar contenido dinámico al PDF
       documentContent.push({
         text: `Hallazgos:`,
         style: 'sectionTitle',
@@ -246,6 +250,7 @@ export const MedicalExaminationListPage: FC = () => {
 
       if (item.doctor) {
         const doctorInfo = [];
+
         if (item.doctor.name && item.doctor.lastName) {
           doctorInfo.push({
             text: `Dr. ${item.doctor.name} ${item.doctor.lastName}`,
@@ -254,39 +259,30 @@ export const MedicalExaminationListPage: FC = () => {
           });
         }
 
-        let professionIndices: number[] = [];
-        let specializationIndex = -1;
-
-        if (item.medicalExaminationType.type === MedicalExaminationType.Ultrasound) {
-          professionIndices = [1, 2];
-          specializationIndex = 0;
-        } else if (item.medicalExaminationType.type === MedicalExaminationType.Ray) {
-          professionIndices = [0];
-          specializationIndex = -1;
-        }
-
-        if (item.doctor.nameProfession && professionIndices.length > 0) {
-          const professions = professionIndices
-            .filter((index) => index >= 0 && index < item.doctor.nameProfession.length)
-            .map((index) => item.doctor.nameProfession[index])
-            .join(' -');
-          doctorInfo.push({
-            text: professions,
-            style: 'doctorContent',
-            margin: [0, 5],
-          });
-        }
-
         if (
-          item.doctor.specialization &&
-          specializationIndex >= 0 &&
-          specializationIndex < item.doctor.specialization.length
+          item.medicalExaminationType.name === 'Mamaria' ||
+          item.medicalExaminationType.name === 'Obstetrica'
         ) {
-          doctorInfo.push({
-            text: `${item.doctor.specialization[specializationIndex]}`,
-            style: 'doctorContent',
-            margin: [0, 2],
-          });
+          if (item.doctor.nameProfession && item.doctor.nameProfession.length > 2) {
+            doctorInfo.push({
+              text: `${item.doctor.nameProfession[1]} -${item.doctor.nameProfession[2]}`,
+              style: 'doctorContent',
+              margin: [0, 5],
+            });
+            doctorInfo.push({
+              text: `${item.doctor.specialization[0]} `,
+              style: 'doctorContent',
+              margin: [0, 5],
+            });
+          }
+        } else {
+          if (item.doctor.nameProfession && item.doctor.nameProfession.length > 0) {
+            doctorInfo.push({
+              text: `${item.doctor.nameProfession[0]}`,
+              style: 'doctorContent',
+              margin: [0, 5],
+            });
+          }
         }
 
         documentContent.push({
@@ -346,10 +342,9 @@ export const MedicalExaminationListPage: FC = () => {
         },
       };
 
-      // Crear el PDF y abrirlo en una nueva pestaña
       pdfMake.createPdf(documentDefinition).getBlob((blob) => {
-        const url = URL.createObjectURL(blob); // Crear una URL válida para el Blob
-        const newWindow = window.open(url, '_blank'); // Abrir la URL en una nueva pestaña
+        const url = URL.createObjectURL(blob);
+        const newWindow = window.open(url, '_blank');
         if (!newWindow) {
           console.error('No se pudo abrir una nueva pestaña.');
           setNotification({

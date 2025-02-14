@@ -15,8 +15,10 @@ export const CreateMedicalPatientPage: FC = () => {
     (formValues: IMedicalPatientFormValues) => {
       setLoading(true);
 
+      const formattedFur = formValues.fur ? formValues.fur.toISOString() : null;
+
       createMedicalPatient
-        .execute({  ...formValues, fur: formValues.fur.toISOString() })
+        .execute({  ...formValues, fur:formattedFur })
         .then(response => {
           setLoading(false);
           const titleNotification = 'Creación de paciente médico';

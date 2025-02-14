@@ -46,7 +46,7 @@ export const RangeDatePicker: FC<IRangeDatePickerProps> = ({ id, label, required
     [],
   );
 
-  const years = useMemo(() => Array.from({ length: 21 }, (_, i) => currentDate.getFullYear() - 10 + i), [currentDate]);
+  const age = useMemo(() => Array.from({ length: 21 }, (_, i) => currentDate.getFullYear() - 10 + i), [currentDate]);
 
   const prevMonth = useCallback(() => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)), []);
 
@@ -190,7 +190,7 @@ export const RangeDatePicker: FC<IRangeDatePickerProps> = ({ id, label, required
                 className="p-1 text-sm border rounded w-20 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                 aria-label="Seleccionar año"
               >
-                {years.map(year => (
+                {age.map(year => (
                   <option key={year} value={year}>
                     {year}
                   </option>

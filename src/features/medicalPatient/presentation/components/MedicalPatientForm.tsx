@@ -12,7 +12,7 @@ enum FormFields {
   lastName = 'lastName',
   middleName = 'middleName',
   secondaryLastName = 'secondaryLastName',
-  years = 'years',
+  age = 'age',
   fur = 'fur',
 }
 
@@ -22,7 +22,7 @@ export interface IMedicalPatientFormValues {
   [FormFields.lastName]: string;
   [FormFields.middleName]: string;
   [FormFields.secondaryLastName]: string;
-  [FormFields.years]: string;
+  [FormFields.age]: string;
   [FormFields.fur]: Date;
 }
 
@@ -34,6 +34,23 @@ interface IMedicalPatientFormProps {
 
 export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData, medicalPatient, loading }) => {
   const [form] = Form.useForm();
+
+  const validateRut = (_: any, value: string) => {
+    if (!value) return Promise.resolve();
+
+    const rutRegex = /^[0-9]{7,8}-[0-9kK]$/;
+    if (rutRegex.test(value)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('El RUT debe tener el formato 11111111-1 o 11111111-K'));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const sanitizedValue = inputValue.replace(/[^0-9kK-]/g, '');
+    form.setFieldsValue({ [FormFields.rut]: sanitizedValue });
+  };
+
 
   return (
     <Form
@@ -54,10 +71,20 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
         <Column colSpan="col-span-4">
           <Form.Item
             label="Rut"
-            initialValue={medicalPatient?.rut}
             name={FormFields.rut}
+            initialValue={medicalPatient?.rut || ""}
+            rules={[
+              {
+                validator: validateRut,
+              },
+            ]}
           >
-            <Input placeholder="Ingrese el rut..." disabled={loading} />
+            <Input
+              placeholder="Ingrese el rut..."
+              disabled={loading}
+              maxLength={10}
+              onChange={handleInputChange}
+            />
           </Form.Item>
         </Column>
 
@@ -66,8 +93,8 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
             required
             label="Edad"
             rules={[{ required: true, message: 'Debe ingresar la edad' }]}
-            initialValue={medicalPatient?.years}
-            name={FormFields.years}
+            initialValue={medicalPatient?.age}
+            name={FormFields.age}
           >
             <Input placeholder="Ingrese la edad..." disabled={loading} />
           </Form.Item>

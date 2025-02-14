@@ -4,7 +4,10 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 import { createMedicalExamination } from './controller.ts';
 import { RiHome4Line } from '@remixicon/react';
 import { BreadCrumb, Container, DocumentMetadata } from '../../../_global';
-import { type IMedicalExaminationFormValues, MedicalExaminationForm } from '../components';
+import {
+  type IMedicalExaminationCreateFormValues,
+  MedicalExaminationCreateForm,
+} from '../components';
 import { type loaderMedicalExaminationCreate } from '../dataFetching';
 
 export const CreateMedicalExaminationPage: FC = () => {
@@ -15,7 +18,7 @@ export const CreateMedicalExaminationPage: FC = () => {
 
 
   const handleOnSubmit = useCallback(
-    (formValues: IMedicalExaminationFormValues) => {
+    (formValues: IMedicalExaminationCreateFormValues) => {
       setLoading(true);
 
       createMedicalExamination
@@ -80,7 +83,7 @@ export const CreateMedicalExaminationPage: FC = () => {
       <DocumentMetadata title={`Crear examen médico - Examenes médicos`} />
       <BreadCrumb title="Crear examen médico" navItems={navItems} />
       <Container>
-        <MedicalExaminationForm
+        <MedicalExaminationCreateForm
           loading={loading}
           onSubmitData={handleOnSubmit}
           medicalPatients={medicalPatients}

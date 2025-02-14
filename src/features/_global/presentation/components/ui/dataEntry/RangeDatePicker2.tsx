@@ -56,7 +56,7 @@ export const RangeDatePicker2: React.FC<RangeDatePickerProps> = ({
     [],
   );
 
-  const years = useMemo(
+  const age = useMemo(
     () => Array.from({ length: 50 }, (_, i) => currentDate[0].getFullYear() - 15 + i),
     [currentDate],
   );
@@ -211,7 +211,7 @@ export const RangeDatePicker2: React.FC<RangeDatePickerProps> = ({
                 label="Año"
                 value={currentDate[0].getFullYear().toString()}
                 onChange={e => handleYearChange(e, true)}
-                options={years.map(year => ({
+                options={age.map(year => ({
                   label: year.toString(),
                   value: year.toString(),
                 }))}
@@ -234,7 +234,7 @@ export const RangeDatePicker2: React.FC<RangeDatePickerProps> = ({
                 label="Año"
                 value={currentDate[1].getFullYear().toString()}
                 onChange={e => handleYearChange(e, false)}
-                options={years.map(year => ({
+                options={age.map(year => ({
                   label: year.toString(),
                   value: year.toString(),
                 }))}

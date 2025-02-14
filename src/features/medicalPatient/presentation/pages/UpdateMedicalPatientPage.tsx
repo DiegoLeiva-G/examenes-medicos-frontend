@@ -17,8 +17,14 @@ export const UpdateMedicalPatientPage: FC = () => {
     (formValues: IMedicalPatientFormValues) => {
       setLoading(true);
 
+      const formattedFur = formValues.fur ? formValues.fur.toISOString() : null;
+
       updateMedicalPatient
-        .execute({ id: medicalPatientId, ...formValues, fur: formValues.fur.toISOString() })
+        .execute({ id: medicalPatientId, ...formValues,
+          rut: formValues.rut || "",
+          middleName: formValues.middleName || "",
+          secondaryLastName: formValues.secondaryLastName || "",
+          fur: formattedFur })
         .then(response => {
           setLoading(false);
           const titleNotification = 'Edición del paciente médico';

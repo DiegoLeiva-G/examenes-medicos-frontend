@@ -35,6 +35,8 @@ export class MedicalExaminationGetAllResponseEntity implements Pick<MedicalExami
       rut?: MedicalPatientEntity['rut'];
       middleName?: MedicalPatientEntity['middleName'];
       secondaryLastName?: MedicalPatientEntity['secondaryLastName'];
+      age?: MedicalPatientEntity['age'];
+      fur?: MedicalPatientEntity['fur'];
     },
     public doctor: {
       id: DoctorEntity['id'];
@@ -74,6 +76,8 @@ export class MedicalExaminationGetByIdResponseEntity implements Pick<MedicalExam
       rut?: MedicalPatientEntity['rut'];
       middleName?: MedicalPatientEntity['middleName'];
       secondaryLastName?: MedicalPatientEntity['secondaryLastName'];
+      age?: MedicalPatientEntity['age'];
+      fur?: MedicalPatientEntity['fur'];
     },
     public doctor: {
       id: DoctorEntity['id'];
