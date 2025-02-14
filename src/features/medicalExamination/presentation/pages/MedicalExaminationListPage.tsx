@@ -8,8 +8,7 @@ import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { type MedicalExaminationEntity, type MedicalExaminationGetAllResponseEntity } from '../../domain';
 import { type loaderMedicalExaminationList, type medicalExaminationDynamicFilters } from '../dataFetching';
 import { DatePicker, Input, Select, Table, type TableProps } from 'antd';
-import { apsaIcon, medicalExaminationTypesTranslation, textCapitalize } from '@core/helpers';
-import { MedicalExaminationType } from '../../../medicalExaminationType';
+import { apsaIcon, formatRut, medicalExaminationTypesTranslation, textCapitalize } from '@core/helpers';
 import DOMPurify from 'dompurify';
 import htmlToPdfmake from 'html-to-pdfmake';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -102,7 +101,12 @@ export const MedicalExaminationListPage: FC = () => {
                   margin: [0, 1.5],
                 },
                 {
-                  text: `Edad: ${item.medicalPatient} Años`,
+                  text: `Edad: ${item.medicalPatient.age} Años`,
+                  style: 'sectionContent',
+                  margin: [0, 1.5],
+                },
+                item.medicalPatient.rut && {
+                  text: `Rut: ${formatRut(item.medicalPatient.rut)}`,
                   style: 'sectionContent',
                   margin: [0, 1.5],
                 },
@@ -111,7 +115,7 @@ export const MedicalExaminationListPage: FC = () => {
                   style: 'sectionContent',
                   margin: [0, 1.5],
                 },
-                {
+                item.medicalPatient.fur && {
                   text: `F.U.R.: ${dayjs(item.medicalPatient.fur).format('DD/MM/YYYY')}`,
                   style: 'sectionContent',
                   margin: [0, 1.5],
