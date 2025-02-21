@@ -1,13 +1,10 @@
 import { type FC, useCallback, useMemo, useState } from 'react';
 import { useNotification } from '@core/contexts';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 import { createMedicalExamination } from './controller.ts';
 import { RiHome4Line } from '@remixicon/react';
 import { BreadCrumb, Container, DocumentMetadata } from '../../../_global';
-import {
-  type IMedicalExaminationCreateFormValues,
-  MedicalExaminationCreateForm,
-} from '../components';
+import { type IMedicalExaminationCreateFormValues, MedicalExaminationCreateForm } from '../components';
 import { type loaderMedicalExaminationCreate } from '../dataFetching';
 
 export const CreateMedicalExaminationPage: FC = () => {
@@ -16,13 +13,12 @@ export const CreateMedicalExaminationPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-
   const handleOnSubmit = useCallback(
     (formValues: IMedicalExaminationCreateFormValues) => {
       setLoading(true);
 
       createMedicalExamination
-        .execute({  ...formValues, dateExam: formValues.dateExam.toISOString(), })
+        .execute({ ...formValues, dateExam: formValues.dateExam.toISOString() })
         .then(response => {
           setLoading(false);
           const titleNotification = 'Creación de examen médico';
@@ -91,6 +87,7 @@ export const CreateMedicalExaminationPage: FC = () => {
           doctors={doctors}
         />
       </Container>
+      <Outlet />
     </>
   );
 };

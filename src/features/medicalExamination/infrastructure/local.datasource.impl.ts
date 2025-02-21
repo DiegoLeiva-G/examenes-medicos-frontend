@@ -20,7 +20,7 @@ export class MedicalExaminationDatasourceImpl implements MedicalExaminationDatas
       import.meta.env.VITE_API_BASE_URL + '/medical-examinations?page=' + page + '&limit=' + limit,
       {
         method: 'GET',
-        credentials: 'include',
+        // credentials: 'include',
       },
     ).then(response => response.json());
   }
@@ -28,14 +28,14 @@ export class MedicalExaminationDatasourceImpl implements MedicalExaminationDatas
   public async getMedicalExaminationById(id: MedicalExaminationEntity['id']): Promise<IApiResponse<MedicalExaminationGetByIdResponseEntity>> {
     return fetch(import.meta.env.VITE_API_BASE_URL + '/medical-examinations/' + id, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
     }).then(response => response.json());
   }
 
   public async deleteMedicalExamination(id: MedicalExaminationEntity['id']): Promise<IApiResponse<MedicalExaminationDeleteResponseEntity>> {
     return fetch(import.meta.env.VITE_API_BASE_URL + '/medical-examinations/' + id, {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'include',
     }).then(response => response.json());
   }
 
@@ -57,7 +57,7 @@ export class MedicalExaminationDatasourceImpl implements MedicalExaminationDatas
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      credentials: 'include',
+      // credentials: 'include',
       body: urlEncodedData.toString(),
     }).then(response => response.json());
   }
@@ -81,7 +81,7 @@ export class MedicalExaminationDatasourceImpl implements MedicalExaminationDatas
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      credentials: 'include',
+      // credentials: 'include',
       body: urlEncodedData.toString(),
     }).then(response => response.json());
   }

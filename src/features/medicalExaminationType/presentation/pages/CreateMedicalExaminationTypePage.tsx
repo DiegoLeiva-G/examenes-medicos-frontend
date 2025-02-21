@@ -76,7 +76,7 @@ export const CreateMedicalExaminationTypePage: FC = () => {
   return (
     <>
       <DocumentMetadata title={`Crear tipo de examen médico - examenes médicos`} />
-      <BreadCrumb title="Crear tipoo de examen médico" navItems={navItems} />
+      <BreadCrumb title="Crear tipo de examen médico" navItems={navItems} />
       <Container>
         <MedicalExaminationTypeForm loading={loading} onSubmitData={handleOnSubmit} />
       </Container>

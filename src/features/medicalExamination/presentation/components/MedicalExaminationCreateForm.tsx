@@ -1,8 +1,8 @@
 import { type MedicalExaminationGetAllResponseEntity } from '../../domain';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { Column, Row } from '../../../_global';
-import { Link } from 'react-router-dom';
-import { RiSaveLine } from '@remixicon/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { RiAddLine, RiSaveLine } from '@remixicon/react';
 import { DatePicker, Form, Select } from 'antd';
 import { type MedicalPatientEntity } from '../../../medicalPatient';
 import { type MedicalExaminationTypeEntity } from '../../../medicalExaminationType';
@@ -63,6 +63,9 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState<MedicalExaminationTypeEntity | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   console.log(selectedType);
 
@@ -75,15 +78,6 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
   const anexes2EditorRef = useRef(null);
   const descriptionAnexesEditorRef = useRef(null);
   const conclusionEditorRef = useRef(null);
-
-  const medicalPatientOptions = useMemo(
-    () =>
-      medicalPatients.map(medicalPatient => ({
-        label: `${medicalPatient.name} ${medicalPatient.lastName}`,
-        value: medicalPatient.id,
-      })),
-    [medicalPatients],
-  );
 
   const medicalExaminationTypeOptions = useMemo(
     () =>
@@ -134,7 +128,7 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
   };
 
   const handleTypeChange = (value: string) => {
-    const selected = medicalExaminationTypes.find((type) => type.id === value);
+    const selected = medicalExaminationTypes.find(type => type.id === value);
 
     // Limpiar todos los editores antes de cargar nuevos valores
     if (observationEditorRef.current) {
@@ -290,6 +284,41 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
     }
   }, [medicalExamination, isInitialized]);
 
+  useEffect(() => {
+    if (location.state?.newPatientId) {
+      setSelectedPatientId(location.state.newPatientId);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
+
+  useEffect(() => {
+    if (selectedPatientId) {
+      form.setFieldsValue({ medicalPatientId: selectedPatientId });
+    }
+  }, [selectedPatientId, form]);
+
+  const medicalPatientOptions = useMemo(
+    () => [
+      {
+        label: (
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => navigate('/examenes-medicos/crear/paciente')}
+          >
+            <span className="font-semibold text-gray-800">Crear paciente</span>
+            <RiAddLine />
+          </div>
+        ),
+        value: 'Crear',
+      },
+      ...medicalPatients.map(medicalPatient => ({
+        label: `${medicalPatient.name} ${medicalPatient.lastName}`,
+        value: medicalPatient.id,
+      })),
+    ],
+    [medicalPatients, navigate],
+  );
+
   return (
     <Form
       form={form}
@@ -335,7 +364,42 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
       }}
     >
       <Row spacingX="sm:gap-x-6">
-        <Column colSpan="col-span-3">
+        <Column colSpan="col-span-6">
+          <Form.Item
+            label="Médico"
+            name="doctorId"
+            rules={[{ required: true, message: 'El médico es requerido' }]}
+            initialValue={doctors[0]?.id || ''}
+          >
+            <Select
+              placeholder="Seleccione el tipo de examen médico"
+              allowClear
+              showSearch
+              optionFilterProp="label"
+              options={doctorOptions}
+            />
+          </Form.Item>
+        </Column>
+
+        <Column colSpan="col-span-6">
+          <Form.Item
+            label="Fecha del Examen"
+            name={FormFields.dateExam}
+            rules={[{ required: true, message: 'La fecha del examen es requerida' }]}
+            initialValue={dayjs()}
+          >
+            <DatePicker
+              className="w-full"
+              format="DD/MM/YYYY"
+              placeholder="Seleccione la fecha del examen"
+              disabled={loading}
+            />
+          </Form.Item>
+        </Column>
+      </Row>
+
+      <Row spacingX="sm:gap-x-6">
+        <Column colSpan="col-span-6">
           <Form.Item
             label="Tipo de examen"
             name="medicalExaminationTypeId"
@@ -353,7 +417,7 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
           </Form.Item>
         </Column>
 
-        <Column colSpan="col-span-3">
+        <Column colSpan="col-span-6">
           <Form.Item
             label="Paciente médico"
             name="medicalPatientId"
@@ -366,39 +430,6 @@ export const MedicalExaminationCreateForm: FC<IMedicalExaminationCreateFormProps
               showSearch
               optionFilterProp="label"
               options={medicalPatientOptions}
-            />
-          </Form.Item>
-        </Column>
-
-        <Column colSpan="col-span-3">
-          <Form.Item
-            label="Médico"
-            name="doctorId"
-            rules={[{ required: true, message: 'El médico es requerido' }]}
-            initialValue={doctors[0]?.id || ''}
-          >
-            <Select
-              placeholder="Seleccione el tipo de examen médico"
-              allowClear
-              showSearch
-              optionFilterProp="label"
-              options={doctorOptions}
-            />
-          </Form.Item>
-        </Column>
-
-        <Column colSpan="col-span-3">
-          <Form.Item
-            label="Fecha del Examen"
-            name={FormFields.dateExam}
-            rules={[{ required: true, message: 'La fecha del examen es requerida' }]}
-            initialValue={dayjs()}
-          >
-            <DatePicker
-              className="w-full"
-              format="DD/MM/YYYY"
-              placeholder="Seleccione la fecha del examen"
-              disabled={loading}
             />
           </Form.Item>
         </Column>

@@ -21,7 +21,7 @@ export class DoctorDatasourceImpl implements DoctorDatasource {
       import.meta.env.VITE_API_BASE_URL + '/doctors?page=' + page + '&limit=' + limit + '&search=' + search,
       {
         method: 'GET',
-        credentials: 'include',
+        // credentials: 'include',
       },
     ).then(response => response.json());
   }
@@ -29,14 +29,14 @@ export class DoctorDatasourceImpl implements DoctorDatasource {
   public async getDoctorById(id: DoctorEntity['id']): Promise<IApiResponse<DoctorGetByIdResponseEntity>> {
     return fetch(import.meta.env.VITE_API_BASE_URL + '/doctors/' + id, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
     }).then(response => response.json());
   }
 
   public async deleteDoctor(id: DoctorEntity['id']): Promise<IApiResponse<DoctorDeleteResponseEntity>> {
     return fetch(import.meta.env.VITE_API_BASE_URL + '/doctors/' + id, {
       method: 'DELETE',
-      credentials: 'include',
+      // credentials: 'include',
     }).then(response => response.json());
   }
 
@@ -58,7 +58,7 @@ export class DoctorDatasourceImpl implements DoctorDatasource {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      credentials: 'include',
+      // credentials: 'include',
       body: urlEncodedData.toString(),
     }).then(response => response.json());
   }
@@ -82,7 +82,7 @@ export class DoctorDatasourceImpl implements DoctorDatasource {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      credentials: 'include',
+      // credentials: 'include',
       body: urlEncodedData.toString(),
     }).then(response => response.json());
   }

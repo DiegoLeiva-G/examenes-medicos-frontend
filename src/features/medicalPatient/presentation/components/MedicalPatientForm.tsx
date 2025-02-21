@@ -17,7 +17,7 @@ enum FormFields {
 }
 
 export interface IMedicalPatientFormValues {
-  [FormFields.rut]: string
+  [FormFields.rut]: string;
   [FormFields.name]: string;
   [FormFields.lastName]: string;
   [FormFields.middleName]: string;
@@ -51,7 +51,6 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
     form.setFieldsValue({ [FormFields.rut]: sanitizedValue });
   };
 
-
   return (
     <Form
       form={form}
@@ -72,30 +71,19 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
           <Form.Item
             label="Rut"
             name={FormFields.rut}
-            initialValue={medicalPatient?.rut || ""}
+            initialValue={medicalPatient?.rut || ''}
             rules={[
               {
                 validator: validateRut,
               },
             ]}
           >
-            <Input
-              placeholder="Ingrese el rut..."
-              disabled={loading}
-              maxLength={10}
-              onChange={handleInputChange}
-            />
+            <Input placeholder="Ingrese el rut..." disabled={loading} maxLength={10} onChange={handleInputChange} />
           </Form.Item>
         </Column>
 
         <Column colSpan="col-span-4">
-          <Form.Item
-            required
-            label="Edad"
-            rules={[{ required: true, message: 'Debe ingresar la edad' }]}
-            initialValue={medicalPatient?.age}
-            name={FormFields.age}
-          >
+          <Form.Item label="Edad" initialValue={medicalPatient?.age} name={FormFields.age}>
             <Input placeholder="Ingrese la edad..." disabled={loading} />
           </Form.Item>
         </Column>
@@ -106,12 +94,7 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
             name={FormFields.fur}
             initialValue={medicalPatient?.fur ? dayjs(medicalPatient.fur) : undefined}
           >
-            <DatePicker
-              className="w-full"
-              format="DD/MM/YYYY"
-              placeholder="Seleccione la F.U.R."
-              disabled={loading}
-            />
+            <DatePicker className="w-full" format="DD/MM/YYYY" placeholder="Seleccione la F.U.R." disabled={loading} />
           </Form.Item>
         </Column>
       </Row>
@@ -130,11 +113,7 @@ export const MedicalPatientForm: FC<IMedicalPatientFormProps> = ({ onSubmitData,
         </Column>
 
         <Column colSpan="col-span-6">
-          <Form.Item
-            label="Segundo nombre"
-            initialValue={medicalPatient?.middleName}
-            name={FormFields.middleName}
-          >
+          <Form.Item label="Segundo nombre" initialValue={medicalPatient?.middleName} name={FormFields.middleName}>
             <Input placeholder="Ingrese el nombre..." disabled={loading} />
           </Form.Item>
         </Column>

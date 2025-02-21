@@ -1,4 +1,9 @@
-import { CreateMedicalExaminationPage, MedicalExaminationListPage, UpdateMedicalExaminationPage } from '../pages';
+import {
+  CreateMedicalExaminationPage,
+  CreateMedicalPatientModalPage,
+  MedicalExaminationListPage,
+  UpdateMedicalExaminationPage,
+} from '../pages';
 import type { RouteObject } from 'react-router-dom';
 import { ErrorPage } from '../../../_global';
 import {
@@ -21,6 +26,15 @@ export const MedicalExaminationRoutes: RouteObject[] = [
     loader: loaderMedicalExaminationCreate,
     hydrateFallbackElement: <p>Cargando...</p>,
     errorElement: <ErrorPage />,
+    shouldRevalidate: () => true,
+    children: [
+      {
+        path: 'paciente',
+        element: <CreateMedicalPatientModalPage />,
+        hydrateFallbackElement: <p>Cargando...</p>,
+        errorElement: <ErrorPage />,
+      },
+    ],
   },
   {
     path: 'examenes-medicos/:medicalExaminationId/editar',

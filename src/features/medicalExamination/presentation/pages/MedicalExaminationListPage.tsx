@@ -76,7 +76,7 @@ export const MedicalExaminationListPage: FC = () => {
     tempDiv.innerHTML = html;
 
     const emptyParagraphs = tempDiv.querySelectorAll('p');
-    emptyParagraphs.forEach((p) => {
+    emptyParagraphs.forEach(p => {
       if (!p.textContent?.trim()) {
         p.remove();
       }
@@ -101,7 +101,7 @@ export const MedicalExaminationListPage: FC = () => {
                   margin: [0, 1.5],
                 },
                 {
-                  text: `Edad: ${item.medicalPatient.age} Años`,
+                  text: `Edad: ${item.medicalPatient.age ? item.medicalPatient.age + ' Años' : '-'}`,
                   style: 'sectionContent',
                   margin: [0, 1.5],
                 },
@@ -263,10 +263,7 @@ export const MedicalExaminationListPage: FC = () => {
           });
         }
 
-        if (
-          item.medicalExaminationType.name === 'Mamaria' ||
-          item.medicalExaminationType.name === 'Obstetrica'
-        ) {
+        if (item.medicalExaminationType.name === 'Mamaria' || item.medicalExaminationType.name === 'Obstetrica') {
           if (item.doctor.nameProfession && item.doctor.nameProfession.length > 2) {
             doctorInfo.push({
               text: `${item.doctor.nameProfession[1]} -${item.doctor.nameProfession[2]}`,
@@ -307,7 +304,7 @@ export const MedicalExaminationListPage: FC = () => {
         content: documentContent,
         styles: {
           header: {
-            fontSize: 22,
+            fontSize: 18,
             bold: true,
             alignment: 'center',
             color: '#000000',
@@ -346,7 +343,7 @@ export const MedicalExaminationListPage: FC = () => {
         },
       };
 
-      pdfMake.createPdf(documentDefinition).getBlob((blob) => {
+      pdfMake.createPdf(documentDefinition).getBlob(blob => {
         const url = URL.createObjectURL(blob);
         const newWindow = window.open(url, '_blank');
         if (!newWindow) {
@@ -447,16 +444,14 @@ export const MedicalExaminationListPage: FC = () => {
     let filteredResults = medicalExaminations.results;
 
     if (selectedType) {
-      filteredResults = filteredResults.filter(
-        (item) => item.medicalExaminationType.type === selectedType
-      );
+      filteredResults = filteredResults.filter(item => item.medicalExaminationType.type === selectedType);
     }
 
     if (selectedWeek) {
       const startOfWeek = selectedWeek.startOf('week');
       const endOfWeek = selectedWeek.endOf('week');
 
-      filteredResults = filteredResults.filter((item) => {
+      filteredResults = filteredResults.filter(item => {
         const examDate = dayjs(item.dateExam);
         return examDate.isAfter(startOfWeek) && examDate.isBefore(endOfWeek);
       });
@@ -464,17 +459,15 @@ export const MedicalExaminationListPage: FC = () => {
 
     if (selectedDay) {
       const selectedDate = selectedDay.startOf('day');
-      filteredResults = filteredResults.filter((item) => {
+      filteredResults = filteredResults.filter(item => {
         const examDate = dayjs(item.dateExam).startOf('day');
         return examDate.isSame(selectedDate);
       });
     }
 
     if (searchQuery.trim()) {
-      filteredResults = filteredResults.filter((item) =>
-        `${item.medicalPatient.name} ${item.medicalPatient.lastName}`
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())
+      filteredResults = filteredResults.filter(item =>
+        `${item.medicalPatient.name} ${item.medicalPatient.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 

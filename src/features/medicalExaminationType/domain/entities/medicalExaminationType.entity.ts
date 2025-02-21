@@ -138,7 +138,7 @@ export class MedicalExaminationTypeFormEntity
     public name: MedicalExaminationTypeEntity['name'],
     public type: MedicalExaminationTypeEntity['type'],
     public observation?: MedicalExaminationTypeEntity['observation'] | null,
-    public observation2?: MedicalExaminationTypeEntity['observation'] | null,
+    public observation2?: MedicalExaminationTypeEntity['observation2'] | null,
     public dimension?: MedicalExaminationTypeEntity['dimension'] | null,
     public dimension2?: MedicalExaminationTypeEntity['dimension'] | null,
     public descriptionDimension?: MedicalExaminationTypeEntity['descriptionDimension'] | null,
