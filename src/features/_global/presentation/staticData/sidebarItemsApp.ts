@@ -1,4 +1,11 @@
-import { RiEmpathizeLine, RiFlaskLine, RiHealthBookLine, RiHome4Fill, RiNurseLine } from '@remixicon/react';
+import {
+  RiEmpathizeLine,
+  RiFileMusicLine,
+  RiFlaskLine,
+  RiHealthBookLine,
+  RiHome4Fill,
+  RiNurseLine,
+} from '@remixicon/react';
 
 export const sidebarItemsApp = [
   {
@@ -40,5 +47,13 @@ export const sidebarItemsApp = [
     current: false,
     icon: RiEmpathizeLine,
     iconColor: 'text-blue-900',
+  },
+  {
+    key: 'audios',
+    title: 'Audios',
+    href: '/audios',
+    current: false,
+    icon: RiFileMusicLine,
+    iconColor: 'text-orange-900',
   },
 ];

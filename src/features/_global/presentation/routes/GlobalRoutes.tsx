@@ -5,6 +5,7 @@ import { DoctorRoutes } from '../../../doctor';
 import { MedicalPatientRoutes } from '../../../medicalPatient';
 import { MedicalExaminationTypeRoutes } from '../../../medicalExaminationType';
 import { MedicalExaminationRoutes } from '../../../medicalExamination';
+import { AudioRoutes } from '../../../audios';
 
 export const GlobalRoutes: RouteObject[] = [
   {
@@ -16,6 +17,7 @@ export const GlobalRoutes: RouteObject[] = [
       ...MedicalPatientRoutes,
       ...MedicalExaminationTypeRoutes,
       ...MedicalExaminationRoutes,
+      ...AudioRoutes,
     ],
   },
   {

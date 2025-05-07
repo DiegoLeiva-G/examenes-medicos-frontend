@@ -1,4 +1,4 @@
-import { RiEmpathizeLine, RiFlaskLine, RiHealthBookLine, RiNurseLine } from '@remixicon/react';
+import { RiEmpathizeLine, RiFileMusicLine, RiFlaskLine, RiHealthBookLine, RiNurseLine } from '@remixicon/react';
 
 export const homeCardItems = [
   {
@@ -37,5 +37,13 @@ export const homeCardItems = [
     iconColor: 'text-blue-900',
     iconBackgroundColor: 'bg-blue-50',
   },
-
+  {
+    key: 'audios',
+    title: 'Audios',
+    description: '...',
+    href: '/audios',
+    icon: RiFileMusicLine,
+    iconColor: 'text-orange-900',
+    iconBackgroundColor: 'bg-orange-50',
+  },
 ];
