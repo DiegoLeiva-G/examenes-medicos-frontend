@@ -54,23 +54,20 @@ export const AudioListPage: FC = () => {
     [audios, navigate, onChangePage, setNotification],
   );
 
-  const handleInterpret = async (id: string) => {
+  const handleInterpretWithPath = async (fileName: string) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:3000/audios/interpretar/${id}`);
+      const response = await fetch(`http://localhost:3000/audios/interpretar?path=${encodeURIComponent(fileName)}`);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'No se pudo interpretar el audio');
+        throw new Error('No se pudo interpretar');
       }
 
       const data = await response.json();
-
       setTranscription(data.transcription);
 
-    } catch (error: any) {
-      console.error('Error al interpretar:', error.message);
-      alert('Hubo un problema al interpretar el audio. Inténtalo nuevamente.');
+    } catch (error) {
+      alert('Hubo un problema al interpretar el audio.');
     } finally {
       setLoading(false);
     }
@@ -120,10 +117,7 @@ export const AudioListPage: FC = () => {
         title: 'Interpretar',
         key: 'interpret',
         render: (_, item) => (
-          <button
-            onClick={() => handleInterpret(item.id)}
-            className="text-green-600 hover:text-green-800 underline"
-          >
+          <button onClick={() => handleInterpretWithPath(item.name)}>
             Interpretar
           </button>
         ),

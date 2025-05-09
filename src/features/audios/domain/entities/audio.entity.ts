@@ -7,6 +7,7 @@ export class AudioEntity {
     public path: string | null,
     public type?: string | null,
     public size?: number | null,
+    public textTranslation?: number | null,
     public createdAt?: Date | null,
     public updatedAt?: Date | null,
   ) {}
@@ -19,6 +20,7 @@ export class AudioGetAllResponseEntity implements Omit<AudioEntity,  'deleted' |
     public path: string | null,
     public type?: string | null,
     public size?: number | null,
+    public textTranslation?: number | null,
     public createdAt?: Date | null,
   ) {}
 }
@@ -30,6 +32,7 @@ export class AudioGetByIdResponseEntity implements Pick<AudioEntity, 'id'> {
     public path: string | null,
     public type?: string | null,
     public size?: number | null,
+    public textTranslation?: number | null,
     public createdAt?: Date | null,
   ) {}
 }
@@ -43,6 +46,7 @@ export class AudioCreateResponseEntity
     public path: string | null,
     public type?: string | null,
     public size?: number | null,
+    public textTranslation?: number | null,
   ) {}
 }
 
@@ -50,7 +54,7 @@ export class AudioUpdateResponseEntity
   implements
     Pick<
       AudioEntity,
-      'id' | 'name' | 'path' | 'type' | 'size'
+      'id' | 'name' | 'path' | 'type' | 'size' | 'textTranslation'
     >
 {
   constructor(
@@ -59,6 +63,7 @@ export class AudioUpdateResponseEntity
     public path: string | null,
     public type?: string | null,
     public size?: number | null,
+    public textTranslation?: number | null,
   ) {}
 }
 
@@ -72,6 +77,7 @@ export class AudioFormEntity implements Pick<AudioEntity, 'name'> {
     public path: string | null,
     public type?: string | null,
     public size?: number | null,
+    public textTranslation?: number | null,
     public id?: string | null,
   ) {}
 }
